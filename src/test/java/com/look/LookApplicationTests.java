@@ -1,4 +1,4 @@
-package com.xmy.look;
+package com.look;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
