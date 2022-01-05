@@ -15,7 +15,7 @@ import java.util.Date;
 @Table(name = "history")
 public class History {
     @Id
-    @GeneratedValue(generator = "JDBC")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String userAccount;
     private Integer courseId;

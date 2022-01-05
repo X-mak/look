@@ -1,5 +1,7 @@
 package com.look.entity;
 
+import cn.hutool.core.date.DateUnit;
+import cn.hutool.core.date.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,9 +17,15 @@ import java.util.Date;
 @Table(name = "publish")
 public class Publish {
     @Id
-    @GeneratedValue(generator = "JDBC")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String userAccount;
-    private int courseId;
-    private Date publishDate;
+    private Integer courseId;
+    private String publishDate;
+
+    public Publish(String userAccount, Integer courseId) {
+        this.userAccount = userAccount;
+        this.courseId = courseId;
+        this.publishDate = DateUtil.now();
+    }
 }

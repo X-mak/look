@@ -14,10 +14,19 @@ import javax.persistence.*;
 @Table(name = "course")
 public class Course {
     @Id
-    @GeneratedValue(generator = "JDBC")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String courseName;
     private String courseVideo;
     private String courseImg;
-    private int status;
+    private Integer status;
+    private Integer clicks;
+    @Transient
+    private CourseClass courseClass;
+
+    public Course(String courseName, String courseVideo, String courseImg) {
+        this.courseName = courseName;
+        this.courseVideo = courseVideo;
+        this.courseImg = courseImg;
+    }
 }
