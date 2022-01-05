@@ -29,17 +29,17 @@ public class Result<T> {
         this.data = data;
     }
 
-    public static Result success(){
+    public static Result success(String msg){
         Result result = new Result();
         result.setCode("200");
-        result.setMsg("成功");
+        result.setMsg(msg);
         return result;
     }
 
-    public static <T> Result<T> success(T data){
+    public static <T> Result<T> success(T data,String msg){
         Result<T> result = new Result<>();
         result.setCode("200");
-        result.setMsg("成功");
+        result.setMsg(msg);
         result.setData(data);
         return result;
     }
