@@ -35,7 +35,7 @@ public class AuthenticServiceImp implements AuthenticService{
     @Autowired
     Encode encode;
 
-    public int addAccount(UserAccount userAccount, String roleName , UserInfo userInfo){
+    public int addAccount(UserAccount userAccount, Integer role , UserInfo userInfo){
         UserAccount oldAccount = userAccountMapper.selectByPrimaryKey(userAccount.getUserAccount());
         if(oldAccount != null)
             return -1;
@@ -48,12 +48,13 @@ public class AuthenticServiceImp implements AuthenticService{
         userInfo.setCoins(0);
         userAccountMapper.insertSelective(userAccount);
         userInfoMapper.insertSelective(userInfo);
-        UserRole userRole = new UserRole(roleName);
-        userRoleMapper.insertSelective(userRole);
-        int roleId = userRole.getId();
-        AccountRole accountRole = new AccountRole(roleId,userAccount.getUserAccount());
+        AccountRole accountRole = new AccountRole(role,userAccount.getUserAccount());
         accountRoleMapper.insertSelective(accountRole);
-
+        for (int i = 1; i < role; i++) {
+            if(i == 2)continue;
+            accountRole = new AccountRole(i,userAccount.getUserAccount());
+            accountRoleMapper.insertSelective(accountRole);
+        }
         return 1;
     }
 
@@ -64,18 +65,14 @@ public class AuthenticServiceImp implements AuthenticService{
         String encodePwd = encode.getSHA256StrJava(userAccount.getUserPassword());
         if(selectedAccount == null || ! encodePwd.equals(selectedAccount.getUserPassword().substring(64)))
             return null;
-        Example example = new Example(AccountRole.class);
 
         //加入角色
         List<String> ans = new ArrayList<String>();
-        example.createCriteria().andEqualTo("userAccount",userAccount.getUserAccount());
-        List<AccountRole> accountRoles = accountRoleMapper.selectByExample(example);
-        for(AccountRole i : accountRoles){
-            UserRole userRole = userRoleMapper.selectByPrimaryKey(i.getRoleId());
-            ans.add(userRole.getRoleName());
-        }
+        List<AccountRole> accountRoles = accountRoleMapper.queryRoles(userAccount.getUserAccount());
         UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userAccount.getUserAccount());
-
+        for (AccountRole accountRole : accountRoles){
+            ans.add(accountRole.getUserRole().getRoleName());
+        }
         return new LoginUser(userInfo,ans);
     }
 
@@ -106,6 +103,12 @@ public class AuthenticServiceImp implements AuthenticService{
 
         //更新用户角色,暂时不需要
 
+        return 1;
+    }
+
+    public int addRole(String userAccount,Integer role){
+        AccountRole accountRole = new AccountRole(role,userAccount);
+        accountRoleMapper.insertSelective(accountRole);
         return 1;
     }
 }

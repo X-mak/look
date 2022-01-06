@@ -1,8 +1,10 @@
 package com.look.interior.course.service;
 
+import com.look.entity.Buy;
 import com.look.entity.Course;
 import com.look.entity.CourseClass;
 import com.look.entity.Publish;
+import com.look.mapper.BuyMapper;
 import com.look.mapper.CourseClassMapper;
 import com.look.mapper.CourseMapper;
 import com.look.mapper.PublishMapper;
@@ -25,6 +27,9 @@ public class CourseServiceImp implements CourseService{
     @Autowired
     PublishMapper publishMapper;
 
+    @Autowired
+    BuyMapper buyMapper;
+
     public int addCourse(String userAccount,Course course){
         //补全初始值
         course.setClicks(0);
@@ -36,6 +41,8 @@ public class CourseServiceImp implements CourseService{
         courseClassMapper.insertSelective(courseClass);
         Publish publish = new Publish(userAccount,courseId);
         publishMapper.insertSelective(publish);
+        Buy buy = new Buy(userAccount,courseId);
+        buyMapper.insertSelective(buy);
         return 1;
     }
 

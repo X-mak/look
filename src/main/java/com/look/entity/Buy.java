@@ -17,4 +17,10 @@ public class Buy {
     private Integer id;
     private String userAccount;
     private Integer courseId;
+    @Transient
+    private Course course;
+    public Buy(String userAccount, Integer courseId) {
+        this.userAccount = userAccount;
+        this.courseId = courseId;
+    }
 }

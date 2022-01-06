@@ -6,12 +6,14 @@ import com.look.entity.UserInfo;
 
 public interface AuthenticService {
 
-    public int addAccount(UserAccount userAccount, String role , UserInfo userInfo);
+    public int addAccount(UserAccount userAccount, Integer role , UserInfo userInfo);
 
     public LoginUser checkLogin(UserAccount userAccount);
 
     public int changePwd(UserAccount userAccount,String new_pwd);
 
     public int changeInfo(LoginUser loginUser);
+
+    public int addRole(String userAccount,Integer role);
 
 }

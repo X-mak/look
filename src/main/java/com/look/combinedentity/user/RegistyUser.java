@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class RegistyUser {
     private UserAccount userAccount;
     private UserInfo userInfo;
-    private String roleName;
+    private Integer roleName;
 }

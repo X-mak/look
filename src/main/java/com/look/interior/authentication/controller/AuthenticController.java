@@ -46,5 +46,10 @@ public class AuthenticController {
         return Result.success("修改成功!");
     }
 
-
+    @PostMapping("/role/{role}")
+    public Result<?> addRole(@RequestParam String userAccount,@PathVariable int role){
+        int res = authenticService.addRole(userAccount, role);
+        if(res == -1)return Result.error("400","添加失败!");
+        return Result.success("添加成功!");
+    }
 }

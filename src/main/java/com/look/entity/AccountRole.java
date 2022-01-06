@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -18,6 +19,8 @@ public class AccountRole {
     private Integer id;
     private Integer roleId;
     private String userAccount;
+    @Transient
+    private UserRole userRole;
 
     public AccountRole(Integer roleId, String userAccount) {
         this.roleId = roleId;

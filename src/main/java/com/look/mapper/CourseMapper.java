@@ -34,4 +34,8 @@ public interface CourseMapper extends Mapper<Course> {
     @Select("SELECT c.*,cs.* FROM courseclass cs LEFT JOIN course c ON cs. id = c.id WHERE c.status=1 ORDER BY c.clicks DESC")
     @ResultMap(value = "fullCourse")
     List<Course> queryCourseInfoByClicks(String order);
+
+    @Select("SELECT c.*,cs.* FROM courseclass cs LEFT JOIN course c ON cs. id = c.id WHERE c.id = #{id}")
+    @ResultMap(value = "fullCourse")
+    Course queryById(Integer id);
 }
