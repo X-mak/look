@@ -1,13 +1,12 @@
-package com.look.authentication.controller;
+package com.look.interior.authentication.controller;
 
-import com.look.authentication.service.AuthenticService;
+import com.look.interior.authentication.service.AuthenticService;
 import com.look.combinedentity.user.LoginUser;
 import com.look.combinedentity.user.RegistyUser;
 import com.look.common.Result;
 import com.look.entity.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/user")

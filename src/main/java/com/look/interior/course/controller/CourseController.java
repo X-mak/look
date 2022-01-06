@@ -1,7 +1,9 @@
-package com.look.course.controller;
+package com.look.interior.course.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.look.common.Result;
-import com.look.course.service.CourseService;
+import com.look.interior.course.service.CourseService;
 import com.look.entity.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +26,8 @@ public class CourseController {
     }
 
     @GetMapping("/user/{userAccount}")
-    public Result<?> selectOnesCourses(@PathVariable String userAccount){
-        List<Course> onesCourse = courseService.getOnesCourse(userAccount);
+    public Result<?> selectOnesCourses(@PathVariable String userAccount,@RequestParam int status){
+        List<Course> onesCourse = courseService.getOnesCourse(userAccount,status);
         return Result.success(onesCourse,"搜索成功!");
     }
 
@@ -43,5 +45,16 @@ public class CourseController {
             return Result.error("400","更新失败!");
         return Result.success("更新成功!");
     }
+
+    @GetMapping("/page/{pageNum}")
+    public Result<?> getSelectedCourses(@RequestParam String keyword,@RequestParam String order,@PathVariable int pageNum){
+        int pageSize = 1;
+        PageHelper.startPage(pageNum,pageSize,true);
+        List<Course> allCourse = courseService.getAllCourse("%"+keyword+"%", order);
+        PageInfo<Course> res = new PageInfo<>(allCourse);
+        long total = res.getTotal();
+        return Result.success(res.getList(),total+"");
+    }
+
 
 }

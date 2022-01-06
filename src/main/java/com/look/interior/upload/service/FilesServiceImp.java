@@ -1,4 +1,4 @@
-package com.look.upload.service;
+package com.look.interior.upload.service;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;

@@ -11,19 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginUser {
-    private String userAccount;
+    private UserInfo userInfo;
     private List<String> userRole;
-    private String userName;
-    private String userImg;
 
-    public LoginUser(String userAccount, String userName, String userImg) {
-        this.userAccount = userAccount;
-        this.userName = userName;
-        this.userImg = userImg;
-    }
-
-    public LoginUser(String userAccount, String userName) {
-        this.userAccount = userAccount;
-        this.userName = userName;
-    }
 }

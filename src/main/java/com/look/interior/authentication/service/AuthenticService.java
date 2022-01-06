@@ -1,4 +1,4 @@
-package com.look.authentication.service;
+package com.look.interior.authentication.service;
 
 import com.look.combinedentity.user.LoginUser;
 import com.look.entity.UserAccount;

@@ -1,4 +1,4 @@
-package com.look.course.service;
+package com.look.interior.course.service;
 
 import com.look.entity.Course;
 import com.look.entity.CourseClass;
@@ -40,16 +40,18 @@ public class CourseServiceImp implements CourseService{
     }
 
 
-    public List<Course> getOnesCourse(String userAccount){
+    public List<Course> getOnesCourse(String userAccount,int status){
         List<Course> ans = new ArrayList<Course>();
         Example example = new Example(Publish.class);
         example.createCriteria().andEqualTo("userAccount",userAccount);
         List<Publish> publishes = publishMapper.selectByExample(example);
         for(Publish publish : publishes){
             Course course = courseMapper.selectByPrimaryKey(publish.getCourseId());
-            CourseClass courseClass = courseClassMapper.selectByPrimaryKey(publish.getCourseId());
-            course.setCourseClass(courseClass);
-            ans.add(course);
+            if(course.getStatus() == status){
+                CourseClass courseClass = courseClassMapper.selectByPrimaryKey(publish.getCourseId());
+                course.setCourseClass(courseClass);
+                ans.add(course);
+            }
         }
         return ans;
     }
@@ -68,4 +70,23 @@ public class CourseServiceImp implements CourseService{
         course.setCourseClass(courseClassMapper.selectByPrimaryKey(id));
         return course;
     }
+
+    public List<Course> getAllCourse(String keyword,String order){
+        List<Course> courses = null;
+        if(keyword == ""){
+            if(order == ""){
+                courses = courseMapper.queryCourseInfo();
+            }else{
+                courses = courseMapper.queryCourseInfoByClicks(order);
+            }
+        }else {
+            if(order == ""){
+                courses = courseMapper.queryCourseInfoByKeyword(keyword);
+            }else{
+                courses = courseMapper.queryCourseInfoByKeywordClicks(keyword, order);
+            }
+        }
+        return courses;
+    }
+
 }

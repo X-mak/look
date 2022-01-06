@@ -21,6 +21,7 @@ public class Course {
     private String courseImg;
     private Integer status;
     private Integer clicks;
+    private Integer cost;
     @Transient
     private CourseClass courseClass;
 

@@ -1,10 +1,9 @@
-package com.look.upload.controller;
+package com.look.interior.upload.controller;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpResponse;
 import com.look.common.Result;
-import com.look.upload.service.FilesService;
+import com.look.interior.upload.service.FilesService;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 

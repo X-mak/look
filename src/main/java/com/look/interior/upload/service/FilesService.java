@@ -1,4 +1,4 @@
-package com.look.upload.service;
+package com.look.interior.upload.service;
 
 import org.springframework.web.multipart.MultipartFile;
 

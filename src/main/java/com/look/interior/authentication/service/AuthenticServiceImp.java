@@ -1,4 +1,4 @@
-package com.look.authentication.service;
+package com.look.interior.authentication.service;
 
 import com.look.combinedentity.user.LoginUser;
 import com.look.entity.AccountRole;
@@ -45,6 +45,7 @@ public class AuthenticServiceImp implements AuthenticService{
         userAccount.setUserPassword(encodePwd);
 
         //数据库操作
+        userInfo.setCoins(0);
         userAccountMapper.insertSelective(userAccount);
         userInfoMapper.insertSelective(userInfo);
         UserRole userRole = new UserRole(roleName);
@@ -75,7 +76,7 @@ public class AuthenticServiceImp implements AuthenticService{
         }
         UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userAccount.getUserAccount());
 
-        return new LoginUser(userAccount.getUserAccount(),ans,userInfo.getUserName(),userInfo.getUserImg());
+        return new LoginUser(userInfo,ans);
     }
 
 
@@ -100,7 +101,7 @@ public class AuthenticServiceImp implements AuthenticService{
     public int changeInfo(LoginUser loginUser){
 
         //更新用户信息
-        UserInfo userInfo = new UserInfo(loginUser.getUserAccount(),loginUser.getUserName(),loginUser.getUserImg());
+        UserInfo userInfo = loginUser.getUserInfo();
         userInfoMapper.updateByPrimaryKeySelective(userInfo);
 
         //更新用户角色,暂时不需要
