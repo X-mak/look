@@ -18,4 +18,9 @@ public class CourseClass {
     private Integer id;
     private String age;
     private String subject;
+
+    public CourseClass(String age, String subject) {
+        this.age = age;
+        this.subject = subject;
+    }
 }

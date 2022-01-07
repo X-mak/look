@@ -80,14 +80,14 @@ public class CourseServiceImp implements CourseService{
 
     public List<Course> getAllCourse(String keyword,String order){
         List<Course> courses = null;
-        if(keyword == ""){
-            if(order == ""){
+        if(keyword.equals("")){
+            if(order.equals("")){
                 courses = courseMapper.queryCourseInfo();
             }else{
                 courses = courseMapper.queryCourseInfoByClicks(order);
             }
         }else {
-            if(order == ""){
+            if(order.equals("")){
                 courses = courseMapper.queryCourseInfoByKeyword(keyword);
             }else{
                 courses = courseMapper.queryCourseInfoByKeywordClicks(keyword, order);
@@ -96,4 +96,13 @@ public class CourseServiceImp implements CourseService{
         return courses;
     }
 
+    public List<Course> getClassCourse(String age,String subject,String order){
+        List<Course> courses = null;
+        if(order.equals("")){
+            courses = courseMapper.queryCourseByClass(age, subject);
+        }else{
+            courses = courseMapper.queryCourseByClassClicks(age, subject, order);
+        }
+        return courses;
+    }
 }

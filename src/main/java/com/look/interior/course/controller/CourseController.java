@@ -46,9 +46,11 @@ public class CourseController {
         return Result.success("更新成功!");
     }
 
-    @GetMapping("/page/{pageNum}")
+    @GetMapping("/keyword/{pageNum}")
     public Result<?> getSelectedCourses(@RequestParam String keyword,@RequestParam String order,@PathVariable int pageNum){
+        //设置每页数据量
         int pageSize = 1;
+
         PageHelper.startPage(pageNum,pageSize,true);
         List<Course> allCourse = courseService.getAllCourse("%"+keyword+"%", order);
         PageInfo<Course> res = new PageInfo<>(allCourse);
@@ -56,5 +58,16 @@ public class CourseController {
         return Result.success(res.getList(),total+"");
     }
 
+    @GetMapping("/class/{pageNum}")
+    public Result<?> getSelectedCoursesByClass(@RequestParam String age,@RequestParam String subject,
+                                               @RequestParam String order,@PathVariable int pageNum){
+        //设置每页数据量
+        int pageSize = 1;
 
+        PageHelper.startPage(pageNum,pageSize,true);
+        List<Course> classCourse = courseService.getClassCourse(age, subject, order);
+        PageInfo<Course> res = new PageInfo<>(classCourse);
+        long total = res.getTotal();
+        return Result.success(res.getList(),total+"");
+    }
 }

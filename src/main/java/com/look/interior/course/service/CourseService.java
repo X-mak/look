@@ -16,4 +16,6 @@ public interface CourseService {
 
     public List<Course> getAllCourse(String keyword,String order);
 
+    public List<Course> getClassCourse(String age,String subject,String order);
+
 }
