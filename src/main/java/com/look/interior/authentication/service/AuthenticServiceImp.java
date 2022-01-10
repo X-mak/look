@@ -111,4 +111,16 @@ public class AuthenticServiceImp implements AuthenticService{
         accountRoleMapper.insertSelective(accountRole);
         return 1;
     }
+
+    public LoginUser getUser(String userAccount){
+        //加入角色
+        List<String> ans = new ArrayList<String>();
+        List<AccountRole> accountRoles = accountRoleMapper.queryRoles(userAccount);
+        UserInfo userInfo = userInfoMapper.selectByPrimaryKey(userAccount);
+        for (AccountRole accountRole : accountRoles){
+            ans.add(accountRole.getUserRole().getRoleName());
+        }
+        return new LoginUser(userInfo,ans);
+
+    }
 }

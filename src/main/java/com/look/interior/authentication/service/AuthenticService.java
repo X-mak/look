@@ -16,4 +16,6 @@ public interface AuthenticService {
 
     public int addRole(String userAccount,Integer role);
 
+    public LoginUser getUser(String userAccount);
+
 }
