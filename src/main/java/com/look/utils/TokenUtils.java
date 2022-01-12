@@ -56,13 +56,17 @@ public class TokenUtils {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
             String token = request.getHeader("token");
             String aud = JWT.decode(token).getAudience().get(0);
+            LoginUser loginUser = new LoginUser();
             UserInfo userInfo = staticInfoMapper.selectByPrimaryKey(aud);
             List<AccountRole> accountRoles = staticUserMapper.queryRoles(aud);
             List<String> ans = new ArrayList<>();
             for(AccountRole ar : accountRoles){
                 ans.add(ar.getUserRole().getRoleName());
             }
-            return new LoginUser(userInfo,ans);
+            loginUser.setToken(token);
+            loginUser.setUserInfo(userInfo);
+            loginUser.setUserRole(ans);
+            return loginUser;
         } catch (Exception e) {
             log.error("解析token失败", e);
             return null;

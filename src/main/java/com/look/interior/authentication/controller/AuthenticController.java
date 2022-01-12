@@ -16,6 +16,12 @@ public class AuthenticController {
     @Autowired
     AuthenticService authenticService;
 
+    @GetMapping("/confirm")
+    public Result<?> getUser(){
+        LoginUser loginUser = TokenUtils.getLoginUser();
+        return Result.success(loginUser,"查询成功!");
+    }
+
     @PostMapping
     public Result<?> addUser(@RequestBody RegistyUser registyUser){
         int res = authenticService.addAccount(registyUser.getUserAccount(),
