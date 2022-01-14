@@ -1,5 +1,6 @@
 package com.look.interior.authentication.controller;
 
+import com.look.entity.UserInfo;
 import com.look.interior.authentication.service.AuthenticService;
 import com.look.combinedentity.user.LoginUser;
 import com.look.combinedentity.user.RegistyUser;
@@ -48,8 +49,8 @@ public class AuthenticController {
     }
 
     @PutMapping("/info")
-    public Result<?> changeInfo(@RequestBody LoginUser loginUser){
-        int res = authenticService.changeInfo(loginUser);
+    public Result<?> changeInfo(@RequestBody UserInfo userInfo){
+        int res = authenticService.changeInfo(userInfo);
         if(res == -1)return Result.error("400","修改失败!");
         return Result.success("修改成功!");
     }

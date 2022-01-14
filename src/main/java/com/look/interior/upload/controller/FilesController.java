@@ -33,6 +33,7 @@ public class FilesController {
             //video-img：课程封面上传
             String name = filesService.uploadUserImg(file,type);
             name =  "localhost:8080/files/" + type + "/" + name;
+            name = java.net.URLEncoder.encode(name,"UTF-8");
             return Result.success(name,"上传成功!");
         } catch (IOException e) {
             e.printStackTrace();

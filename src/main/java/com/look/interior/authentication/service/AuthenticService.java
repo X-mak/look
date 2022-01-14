@@ -12,7 +12,7 @@ public interface AuthenticService {
 
     public int changePwd(UserAccount userAccount,String new_pwd);
 
-    public int changeInfo(LoginUser loginUser);
+    public int changeInfo(UserInfo userInfo);
 
     public int addRole(String userAccount,Integer role);
 

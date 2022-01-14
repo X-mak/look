@@ -25,7 +25,7 @@ public class CourseController {
         return Result.success("添加成功!");
     }
 
-    @GetMapping("/user/{userAccount}")
+    @GetMapping("/publish/{userAccount}")
     public Result<?> selectOnesCourses(@PathVariable String userAccount,@RequestParam int status){
         List<Course> onesCourse = courseService.getOnesCourse(userAccount,status);
         return Result.success(onesCourse,"搜索成功!");
