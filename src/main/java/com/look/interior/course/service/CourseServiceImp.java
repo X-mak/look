@@ -36,6 +36,7 @@ public class CourseServiceImp implements CourseService{
             //补全初始值
             course.setClicks(0);
             course.setStatus(0);
+            course.setCost(0);
             courseMapper.insertSelective(course);
             int courseId = course.getId();
             CourseClass courseClass = course.getCourseClass();
