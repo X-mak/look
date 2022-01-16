@@ -13,4 +13,6 @@ public interface ManageService {
     public int validCourse(Integer courseId,String userAccount);
 
     public List<Course> getBoughtCourses(String userAccount);
+
+    public int checkSign(String userAccount,String date);
 }

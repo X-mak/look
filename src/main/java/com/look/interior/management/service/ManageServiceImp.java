@@ -102,4 +102,20 @@ public class ManageServiceImp implements ManageService{
         }
         return  ans;
     }
+
+
+    public int checkSign(String userAccount,String date){
+        Example example = new Example(SignRecord.class);
+        try{
+            example.createCriteria().andEqualTo("userAccount",userAccount).andEqualTo("date",date);
+            List<SignRecord> signRecords = signRecordMapper.selectByExample(example);
+            if(signRecords.size() > 0){
+                return -1;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+        return 1;
+    }
 }
