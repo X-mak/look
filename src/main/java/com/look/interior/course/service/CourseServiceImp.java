@@ -107,4 +107,9 @@ public class CourseServiceImp implements CourseService{
         }
         return courses;
     }
+
+    public List<Course> getCourseByStatus(Integer status){
+        List<Course> courses = courseMapper.queryCourseByStatus(status);
+        return courses;
+    }
 }
