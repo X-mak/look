@@ -13,5 +13,10 @@ import java.util.List;
 public class LoginUser {
     private UserInfo userInfo;
     private List<String> userRole;
+    private String token;
 
+    public LoginUser(UserInfo userInfo, List<String> userRole) {
+        this.userInfo = userInfo;
+        this.userRole = userRole;
+    }
 }

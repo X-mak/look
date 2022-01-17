@@ -18,4 +18,6 @@ public interface CourseService {
 
     public List<Course> getClassCourse(String age,String subject,String order);
 
+    public List<Course> getCourseByStatus(Integer status);
+
 }

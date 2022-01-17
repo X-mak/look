@@ -25,6 +25,14 @@ public class ManageController {
         return Result.success("签到成功!");
     }
 
+    @GetMapping("/sign")
+    public Result<?> checkSign(@RequestParam String userAccount,@RequestParam String date){
+        int res = manageService.checkSign(userAccount, date);
+        if(res == -1)
+            return Result.error("400","已签到");
+        return Result.success("未签到");
+    }
+
     @PostMapping("/course/{courseId}")
     public Result<?> buyNewCourse(@PathVariable Integer courseId, @RequestParam String userAccount){
         int res = manageService.buyCourse(courseId, userAccount);

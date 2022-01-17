@@ -25,7 +25,7 @@ public class CourseController {
         return Result.success("添加成功!");
     }
 
-    @GetMapping("/user/{userAccount}")
+    @GetMapping("/publish/{userAccount}")
     public Result<?> selectOnesCourses(@PathVariable String userAccount,@RequestParam int status){
         List<Course> onesCourse = courseService.getOnesCourse(userAccount,status);
         return Result.success(onesCourse,"搜索成功!");
@@ -37,9 +37,8 @@ public class CourseController {
         return Result.success(course,"搜索成功!");
     }
 
-    @PutMapping("{id}")
-    public Result<?> updateCourse(@RequestBody Course course,@PathVariable int id){
-        course.setId(id);
+    @PutMapping
+    public Result<?> updateCourse(@RequestBody Course course){
         int res = courseService.updateCourse(course);
         if(res == -1)
             return Result.error("400","更新失败!");
@@ -67,6 +66,17 @@ public class CourseController {
         PageHelper.startPage(pageNum,pageSize,true);
         List<Course> classCourse = courseService.getClassCourse(age, subject, order);
         PageInfo<Course> res = new PageInfo<>(classCourse);
+        long total = res.getTotal();
+        return Result.success(res.getList(),total+"");
+    }
+
+    @GetMapping("/status/{pageNum}")
+    public Result<?> getCoursesByStatus(@PathVariable Integer pageNum,@RequestParam Integer status){
+        //设置每页数据量
+        int pageSize = 3;
+        PageHelper.startPage(pageNum,pageSize,true);
+        List<Course> courseByStatus = courseService.getCourseByStatus(status);
+        PageInfo<Course> res = new PageInfo<>(courseByStatus);
         long total = res.getTotal();
         return Result.success(res.getList(),total+"");
     }

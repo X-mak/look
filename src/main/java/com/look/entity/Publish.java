@@ -9,6 +9,7 @@ import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,6 +23,8 @@ public class Publish {
     private String userAccount;
     private Integer courseId;
     private String publishDate;
+    @Transient
+    private List<Course> courses;
 
     public Publish(String userAccount, Integer courseId) {
         this.userAccount = userAccount;

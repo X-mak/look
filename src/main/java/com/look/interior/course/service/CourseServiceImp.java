@@ -31,44 +31,46 @@ public class CourseServiceImp implements CourseService{
     BuyMapper buyMapper;
 
     public int addCourse(String userAccount,Course course){
-        //补全初始值
-        course.setClicks(0);
-        course.setStatus(0);
-        courseMapper.insertSelective(course);
-        int courseId = course.getId();
-        CourseClass courseClass = course.getCourseClass();
-        courseClass.setId(courseId);
-        courseClassMapper.insertSelective(courseClass);
-        Publish publish = new Publish(userAccount,courseId);
-        publishMapper.insertSelective(publish);
-        Buy buy = new Buy(userAccount,courseId);
-        buyMapper.insertSelective(buy);
+
+        try{
+            //补全初始值
+            course.setClicks(0);
+            course.setStatus(0);
+            course.setCost(0);
+            courseMapper.insertSelective(course);
+            int courseId = course.getId();
+            CourseClass courseClass = course.getCourseClass();
+            courseClass.setId(courseId);
+            courseClassMapper.insertSelective(courseClass);
+            Publish publish = new Publish(userAccount,courseId);
+            publishMapper.insertSelective(publish);
+            Buy buy = new Buy(userAccount,courseId);
+            buyMapper.insertSelective(buy);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
         return 1;
     }
 
 
     public List<Course> getOnesCourse(String userAccount,int status){
-        List<Course> ans = new ArrayList<Course>();
-        Example example = new Example(Publish.class);
-        example.createCriteria().andEqualTo("userAccount",userAccount);
-        List<Publish> publishes = publishMapper.selectByExample(example);
-        for(Publish publish : publishes){
-            Course course = courseMapper.selectByPrimaryKey(publish.getCourseId());
-            if(course.getStatus() == status){
-                CourseClass courseClass = courseClassMapper.selectByPrimaryKey(publish.getCourseId());
-                course.setCourseClass(courseClass);
-                ans.add(course);
-            }
-        }
-        return ans;
+        Publish publish = publishMapper.queryPublishedCourse(userAccount, status);
+        return publish.getCourses();
     }
 
 
     public int updateCourse(Course course){
-        courseMapper.updateByPrimaryKeySelective(course);
-        if(course.getCourseClass() != null){
-            courseClassMapper.updateByPrimaryKeySelective(course.getCourseClass());
+        try {
+            courseMapper.updateByPrimaryKeySelective(course);
+            if(course.getCourseClass() != null){
+                courseClassMapper.updateByPrimaryKeySelective(course.getCourseClass());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
         }
+
         return 1;
     }
 
@@ -103,6 +105,11 @@ public class CourseServiceImp implements CourseService{
         }else{
             courses = courseMapper.queryCourseByClassClicks(age, subject, order);
         }
+        return courses;
+    }
+
+    public List<Course> getCourseByStatus(Integer status){
+        List<Course> courses = courseMapper.queryCourseByStatus(status);
         return courses;
     }
 }
