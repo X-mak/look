@@ -48,7 +48,7 @@ public class CourseController {
     @GetMapping("/keyword/{pageNum}")
     public Result<?> getSelectedCourses(@RequestParam String keyword,@RequestParam String order,@PathVariable int pageNum){
         //设置每页数据量
-        int pageSize = 1;
+        int pageSize = 3;
 
         PageHelper.startPage(pageNum,pageSize,true);
         List<Course> allCourse = courseService.getAllCourse("%"+keyword+"%", order);
@@ -61,7 +61,7 @@ public class CourseController {
     public Result<?> getSelectedCoursesByClass(@RequestParam String age,@RequestParam String subject,
                                                @RequestParam String order,@PathVariable int pageNum){
         //设置每页数据量
-        int pageSize = 1;
+        int pageSize = 3;
 
         PageHelper.startPage(pageNum,pageSize,true);
         List<Course> classCourse = courseService.getClassCourse(age, subject, order);

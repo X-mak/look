@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface CourseMapper extends Mapper<Course> {
 
-    @Select("SELECT c.*,cs.* FROM courseclass cs LEFT JOIN course c ON cs. id = c.id WHERE (c.course_name LIKE #{keyword} OR cs.age LIKE #{keyword} OR cs.subject LIKE #{keyword}) AND c.status=1 ")
+    @Select("SELECT c.*,cs.* FROM courseclass cs LEFT JOIN course c ON cs. id = c.id LEFT JOIN publish p ON p.course_id = c.id WHERE (c.course_name LIKE #{keyword} OR cs.age LIKE #{keyword} OR cs.subject LIKE #{keyword}) AND c.status=1 ORDER BY p.publish_date")
     @Results(id = "fullCourse",value = {
             @Result(id = true,column = "id",property = "id"),
             @Result(column = "course_name",property = "courseName"),
@@ -23,7 +23,7 @@ public interface CourseMapper extends Mapper<Course> {
     })
     List<Course> queryCourseInfoByKeyword(String keyword);
 
-    @Select("SELECT c.*,cs.* FROM courseclass cs LEFT JOIN course c ON cs. id = c.id WHERE c.status=1 ")
+    @Select("SELECT c.*,cs.* FROM courseclass cs LEFT JOIN course c ON cs. id = c.id LEFT JOIN publish p ON p.course_id = c.id WHERE c.status=1 ORDER BY p.publish_date")
     @ResultMap(value = "fullCourse")
     List<Course> queryCourseInfo();
 
@@ -39,11 +39,11 @@ public interface CourseMapper extends Mapper<Course> {
     @ResultMap(value = "fullCourse")
     Course queryById(Integer id);
 
-    @Select("SELECT c.*,cs.* FROM courseclass cs LEFT JOIN course c ON cs. id = c.id WHERE cs.age=#{age} AND cs.subject=#{subject}")
+    @Select("SELECT c.*,cs.* FROM courseclass cs LEFT JOIN course c ON cs. id = c.id LEFT JOIN publish p ON p.course_id = c.id WHERE cs.age LIKE #{age} AND cs.subject LIKE #{subject} ORDER BY p.publish_date")
     @ResultMap(value = "fullCourse")
     List<Course> queryCourseByClass(String age,String subject);
 
-    @Select("SELECT c.*,cs.* FROM courseclass cs LEFT JOIN course c ON cs. id = c.id WHERE cs.age=#{age} AND cs.subject=#{subject} ORDER BY c.clicks DESC")
+    @Select("SELECT c.*,cs.* FROM courseclass cs LEFT JOIN course c ON cs. id = c.id WHERE cs.age LIKE #{age} AND cs.subject LIKE #{subject} ORDER BY c.clicks DESC")
     @ResultMap(value = "fullCourse")
     List<Course> queryCourseByClassClicks(String age,String subject,String order);
 
