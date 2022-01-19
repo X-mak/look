@@ -54,9 +54,10 @@ public class CourseServiceImp implements CourseService{
     }
 
 
-    public List<Course> getOnesCourse(String userAccount,int status){
-        Publish publish = publishMapper.queryPublishedCourse(userAccount, status);
-        return publish.getCourses();
+    public List<Course> getOnesCourse(String userAccount,String status){
+        if(status.equals(""))status="%";
+        List<Course> courses = courseMapper.queryPublishCourse(userAccount, status);
+        return courses;
     }
 
 
@@ -75,24 +76,23 @@ public class CourseServiceImp implements CourseService{
     }
 
     public Course getCourseById(Integer id){
-        Course course = courseMapper.selectByPrimaryKey(id);
-        course.setCourseClass(courseClassMapper.selectByPrimaryKey(id));
+        Course course = courseMapper.querySingleCourse(id);
         return course;
     }
 
-    public List<Course> getAllCourse(String keyword,String order){
+    public List<Course> getAllCourse(String keyword,String order,String age,String subject){
         List<Course> courses = null;
         if(keyword.equals("")){
             if(order.equals("")){
-                courses = courseMapper.queryCourseInfo();
+                courses = courseMapper.queryCourseInfo(age, subject);
             }else{
-                courses = courseMapper.queryCourseInfoByClicks(order);
+                courses = courseMapper.queryCourseInfoByClicks(order,age,subject);
             }
         }else {
             if(order.equals("")){
-                courses = courseMapper.queryCourseInfoByKeyword(keyword);
+                courses = courseMapper.queryCourseInfoByKeyword(keyword,age,subject);
             }else{
-                courses = courseMapper.queryCourseInfoByKeywordClicks(keyword, order);
+                courses = courseMapper.queryCourseInfoByKeywordClicks(keyword, order,age,subject);
             }
         }
         return courses;
@@ -114,6 +114,11 @@ public class CourseServiceImp implements CourseService{
 
     public List<Course> getCourseByStatus(Integer status){
         List<Course> courses = courseMapper.queryCourseByStatus(status);
+        return courses;
+    }
+
+    public List<Course> getBoughtCourse(String userAccount){
+        List<Course> courses = courseMapper.queryBoughtCourse(userAccount);
         return courses;
     }
 }

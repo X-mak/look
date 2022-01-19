@@ -24,6 +24,8 @@ public class Course {
     private Integer cost;
     @Transient
     private CourseClass courseClass;
+    @Transient
+    private UserInfo userInfo;
 
     public Course(String courseName, String courseVideo, String courseImg) {
         this.courseName = courseName;

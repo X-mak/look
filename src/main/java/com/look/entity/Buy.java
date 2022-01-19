@@ -1,5 +1,6 @@
 package com.look.entity;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,10 +18,12 @@ public class Buy {
     private Integer id;
     private String userAccount;
     private Integer courseId;
+    private String date;
     @Transient
     private Course course;
     public Buy(String userAccount, Integer courseId) {
         this.userAccount = userAccount;
         this.courseId = courseId;
+        this.date = DateUtil.now();
     }
 }

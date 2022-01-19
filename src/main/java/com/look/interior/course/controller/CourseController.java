@@ -3,12 +3,14 @@ package com.look.interior.course.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.look.common.Result;
+import com.look.entity.Publish;
 import com.look.interior.course.service.CourseService;
 import com.look.entity.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/course")
@@ -25,10 +27,17 @@ public class CourseController {
         return Result.success("添加成功!");
     }
 
-    @GetMapping("/publish/{userAccount}")
-    public Result<?> selectOnesCourses(@PathVariable String userAccount,@RequestParam int status){
-        List<Course> onesCourse = courseService.getOnesCourse(userAccount,status);
-        return Result.success(onesCourse,"搜索成功!");
+    @GetMapping("/publish/{userAccount}/{pageNum}")
+    public Result<?> selectOnesCourses(@PathVariable String userAccount,@RequestParam String status,
+                                       @PathVariable Integer pageNum,@RequestParam Integer pageSize){
+        //设置每页数据量
+        String orderBy = "p.publish_date desc";
+        PageHelper.startPage(pageNum,pageSize,orderBy);
+
+        List<Course> onesCourse = courseService.getOnesCourse(userAccount, status);
+        PageInfo<Course> res = new PageInfo<>(onesCourse);
+        long total = res.getTotal();
+        return Result.success(res.getList(),total+"");
     }
 
     @GetMapping("{id}")
@@ -46,34 +55,36 @@ public class CourseController {
     }
 
     @GetMapping("/keyword/{pageNum}")
-    public Result<?> getSelectedCourses(@RequestParam String keyword,@RequestParam String order,@PathVariable int pageNum){
+    public Result<?> getSelectedCourses(@RequestParam String keyword, @RequestParam String order,
+                                        @RequestParam String age, @RequestParam String subject,
+                                        @PathVariable int pageNum, @RequestParam Integer pageSize){
         //设置每页数据量
-        int pageSize = 3;
 
         PageHelper.startPage(pageNum,pageSize,true);
-        List<Course> allCourse = courseService.getAllCourse("%"+keyword+"%", order);
+        if(age.equals(""))age="%";
+        if(subject.equals(""))subject="%";
+        List<Course> allCourse = courseService.getAllCourse("%"+keyword+"%", order,age,subject);
         PageInfo<Course> res = new PageInfo<>(allCourse);
         long total = res.getTotal();
         return Result.success(res.getList(),total+"");
     }
 
-    @GetMapping("/class/{pageNum}")
-    public Result<?> getSelectedCoursesByClass(@RequestParam String age,@RequestParam String subject,
-                                               @RequestParam String order,@PathVariable int pageNum){
+
+    @GetMapping("/bought/{pageNum}")
+    public Result<?> getBoughtCourses(@PathVariable Integer pageNum,@RequestParam String userAccount,@RequestParam Integer pageSize){
         //设置每页数据量
-        int pageSize = 3;
 
         PageHelper.startPage(pageNum,pageSize,true);
-        List<Course> classCourse = courseService.getClassCourse(age, subject, order);
-        PageInfo<Course> res = new PageInfo<>(classCourse);
+        List<Course> boughtCourse = courseService.getBoughtCourse(userAccount);
+        PageInfo<Course> res = new PageInfo<>(boughtCourse);
         long total = res.getTotal();
         return Result.success(res.getList(),total+"");
     }
 
     @GetMapping("/status/{pageNum}")
-    public Result<?> getCoursesByStatus(@PathVariable Integer pageNum,@RequestParam Integer status){
+    public Result<?> getCoursesByStatus(@PathVariable Integer pageNum,@RequestParam Integer status,@RequestParam Integer pageSize){
         //设置每页数据量
-        int pageSize = 3;
+
         PageHelper.startPage(pageNum,pageSize,true);
         List<Course> courseByStatus = courseService.getCourseByStatus(status);
         PageInfo<Course> res = new PageInfo<>(courseByStatus);

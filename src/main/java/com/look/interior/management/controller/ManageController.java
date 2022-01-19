@@ -49,14 +49,5 @@ public class ManageController {
         return Result.success("可以观看!");
     }
 
-    @GetMapping("/course/page/{pageNum}")
-    public Result<?> getBoughtCourse(@PathVariable Integer pageNum,@RequestParam String userAccount){
-        int pageSize = 1;
-        PageHelper.startPage(pageNum,pageSize,true);
-        List<Course> boughtCourses = manageService.getBoughtCourses(userAccount);
-        PageInfo<Course> res = new PageInfo<Course>(boughtCourses);
-        long total = res.getTotal();
-        return Result.success(res,total+"");
-    }
 
 }

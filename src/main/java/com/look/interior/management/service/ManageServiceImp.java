@@ -94,14 +94,7 @@ public class ManageServiceImp implements ManageService{
         return 1;
     }
 
-    public List<Course> getBoughtCourses(String userAccount){
-        List<Buy> buys = buyMapper.queryForCourses(userAccount);
-        List<Course> ans = new ArrayList<>();
-        for (Buy buy : buys){
-            ans.add(buy.getCourse());
-        }
-        return  ans;
-    }
+
 
 
     public int checkSign(String userAccount,String date){
