@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -42,7 +43,7 @@ public class FilesController {
 
 
     @GetMapping("/{type}/{flag}")
-    public void download(@PathVariable String type, @PathVariable String flag, HttpServletResponse response){
+    public void download(@PathVariable String type, @PathVariable String flag, HttpServletResponse response, HttpServletRequest request){
         //type决定下载的文件类型
         //user-img：用户头像上传
         //video：课程视频上传
@@ -55,8 +56,10 @@ public class FilesController {
             if(StrUtil.isNotEmpty(flag)){
                 response.addHeader("Content-Disposition", "attachment;filename="+ URLEncoder.encode(flag,"UTF-8"));
                 response.setContentType("application/octet-stream");
-
+//                response.setContentType("video/webm");
                 byte[] bytes = FileUtil.readBytes(basePath+flag);
+                response.setHeader("Accept-Ranges", "bytes");
+                response.setHeader("Content-Length", String.valueOf(bytes.length));
                 os = response.getOutputStream();
                 os.write(bytes);
                 os.flush();
