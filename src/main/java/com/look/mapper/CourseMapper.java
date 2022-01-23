@@ -51,6 +51,7 @@ public interface CourseMapper extends Mapper<Course> {
     @ResultMap(value = "fullCourse")
     List<Course> queryCourseByStatus(Integer status);
 
+
     @Select("SELECT c.* FROM course c LEFT JOIN publish p ON c.id = p.course_id WHERE p.user_account = #{userAccount} AND c.status LIKE #{status} ORDER BY p.publish_date DESC")
     @Results(id = "oneCourse",value = {
             @Result(id = true,column = "id",property = "id"),

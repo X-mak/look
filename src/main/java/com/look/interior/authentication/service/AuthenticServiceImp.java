@@ -47,6 +47,8 @@ public class AuthenticServiceImp implements AuthenticService{
 
             //数据库操作
             userInfo.setCoins(0);
+            userInfo.setFans(0);
+            userInfo.setFollowed(0);
             userAccountMapper.insertSelective(userAccount);
             userInfoMapper.insertSelective(userInfo);
             AccountRole accountRole = new AccountRole(role,userAccount.getUserAccount());

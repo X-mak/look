@@ -10,15 +10,13 @@ import javax.persistence.Table;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "userinfo")
-public class UserInfo {
+@NoArgsConstructor
+@Table(name = "likes")
+public class Likes {
     @Id
+    private Integer id;
+    private Integer commentId;
     private String userAccount;
-    private String userName;
-    private String userImg;
-    private Integer coins;
-    private Integer fans;
-    private Integer followed;
+
 }

@@ -82,7 +82,8 @@ public class CourseController {
     }
 
     @GetMapping("/status/{pageNum}")
-    public Result<?> getCoursesByStatus(@PathVariable Integer pageNum,@RequestParam Integer status,@RequestParam Integer pageSize){
+    public Result<?> getCoursesByStatus(@PathVariable Integer pageNum,@RequestParam Integer status,
+                                        @RequestParam Integer pageSize){
         //设置每页数据量
 
         PageHelper.startPage(pageNum,pageSize,true);

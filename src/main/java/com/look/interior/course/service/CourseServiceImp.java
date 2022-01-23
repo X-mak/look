@@ -98,19 +98,6 @@ public class CourseServiceImp implements CourseService{
         return courses;
     }
 
-    public List<Course> getClassCourse(String age,String subject,String order){
-        List<Course> courses = null;
-        if(order.equals("")){
-            if(age.equals(""))age="%";
-            if(subject.equals(""))subject="%";
-            courses = courseMapper.queryCourseByClass(age, subject);
-        }else{
-            if(age.equals(""))age="%";
-            if(subject.equals(""))subject="%";
-            courses = courseMapper.queryCourseByClassClicks(age, subject, order);
-        }
-        return courses;
-    }
 
     public List<Course> getCourseByStatus(Integer status){
         List<Course> courses = courseMapper.queryCourseByStatus(status);
