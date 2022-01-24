@@ -36,6 +36,7 @@ public class ManageController {
     @PostMapping("/course/{courseId}")
     public Result<?> buyNewCourse(@PathVariable Integer courseId, @RequestParam String userAccount){
         int res = manageService.buyCourse(courseId, userAccount);
+
         if(res == -1)
             return Result.error("400","硬币不足!");
         return Result.success("购买成功!");

@@ -68,6 +68,9 @@ public class ManageServiceImp implements ManageService{
             userInfoMapper.updateByPrimaryKeySelective(userInfo);
             Buy buy = new Buy(userAccount,courseId);
             buyMapper.insertSelective(buy);
+            Integer clicks = course.getClicks();
+            course.setClicks(clicks+1);
+            courseMapper.updateByPrimaryKeySelective(course);
         }catch (Exception e){
             e.printStackTrace();
             return -1;
@@ -113,17 +116,4 @@ public class ManageServiceImp implements ManageService{
     }
 
 
-    public int addComments(Comments comments){
-        try{
-            commentsMapper.insertSelective(comments);
-        }catch (Exception e){
-            e.printStackTrace();
-            return -1;
-        }
-        return 1;
-    }
-
-    public List<Comments> getAllComments(String order){
-
-    }
 }

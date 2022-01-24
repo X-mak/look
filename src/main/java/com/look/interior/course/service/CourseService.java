@@ -1,7 +1,9 @@
 package com.look.interior.course.service;
 
+import com.github.pagehelper.PageInfo;
+import com.look.entity.Comments;
 import com.look.entity.Course;
-import com.look.entity.Publish;
+
 
 import java.util.List;
 
@@ -20,5 +22,16 @@ public interface CourseService {
     public List<Course> getBoughtCourse(String userAccount);
 
     public List<Course> getCourseByStatus(Integer status);
+
+    public int addComment(Comments comments);
+
+    public List<Comments> getComments(Integer id,String order,String userAccount);
+
+    public int watchedCourse(String userAccount,Integer courseId);
+
+    public int deleteComment(Integer id);
+
+    public PageInfo<Course> getWatchHistory(String userAccount,Integer pageNum,Integer pageSize);
+
 
 }

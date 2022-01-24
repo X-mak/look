@@ -75,4 +75,8 @@ public interface CourseMapper extends Mapper<Course> {
                     one = @One(select = "com.look.mapper.UserInfoMapper.selectByPrimaryKey"))
     })
     Course querySingleCourse(Integer id);
+
+    @Select("SELECT c.* FROM course c LEFT JOIN history h ON c.id = h.course_id WHERE h.user_account = #{userAccount}")
+    @ResultMap(value = "oneCourse")
+    List<Course> queryHistoryCourse(String userAccount);
 }

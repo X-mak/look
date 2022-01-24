@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Data
@@ -18,4 +19,10 @@ public class Subscribe {
     private Integer id;
     private String mainAccount;
     private String followAccount;
+
+
+    public Subscribe(String mainAccount, String followAccount) {
+        this.mainAccount = mainAccount;
+        this.followAccount = followAccount;
+    }
 }

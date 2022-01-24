@@ -1,13 +1,10 @@
 package com.look.interior.course.service;
 
-import com.look.entity.Buy;
-import com.look.entity.Course;
-import com.look.entity.CourseClass;
-import com.look.entity.Publish;
-import com.look.mapper.BuyMapper;
-import com.look.mapper.CourseClassMapper;
-import com.look.mapper.CourseMapper;
-import com.look.mapper.PublishMapper;
+import cn.hutool.core.date.DateUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.look.entity.*;
+import com.look.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -29,6 +26,12 @@ public class CourseServiceImp implements CourseService{
 
     @Autowired
     BuyMapper buyMapper;
+
+    @Autowired
+    CommentsMapper commentsMapper;
+
+    @Autowired
+    HistoryMapper historyMapper;
 
     public int addCourse(String userAccount,Course course){
 
@@ -108,4 +111,63 @@ public class CourseServiceImp implements CourseService{
         List<Course> courses = courseMapper.queryBoughtCourse(userAccount);
         return courses;
     }
+
+    public int addComment(Comments comments){
+        try{
+            comments.setDate(DateUtil.now());
+            comments.setHot(0);
+            commentsMapper.insertSelective(comments);
+        }catch (Exception e){
+            return -1;
+        }
+        return 1;
+    }
+
+    public List<Comments> getComments(Integer id,String order,String userAccount){
+        List<Comments> comments = new ArrayList<>();
+        if(order.equals("date")){
+            comments = commentsMapper.queryCommentsOrderByTime(id);
+        }else if(order.equals("hot")){
+            comments = commentsMapper.queryCommentsOrderByHot(id);
+        }
+        if(!userAccount.equals("")){
+            for (Comments c:comments){
+                if(c.getUserAccount().equals(userAccount)){
+                    c.setOwn(true);
+                }
+            }
+        }
+        return comments;
+    }
+
+    public int watchedCourse(String userAccount,Integer courseId){
+        History history = new History(userAccount,courseId);
+        try{
+            history.setDate(DateUtil.now());
+            historyMapper.insertSelective(history);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+        return 1;
+    }
+
+    public int deleteComment(Integer id){
+        try{
+            commentsMapper.deleteByPrimaryKey(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+        return 1;
+    }
+
+    public PageInfo<Course> getWatchHistory(String userAccount,Integer pageNum,Integer pageSize){
+        List<Course> courses = courseMapper.queryHistoryCourse(userAccount);
+        PageHelper.startPage(pageNum,pageSize,true);
+        PageInfo<Course> res = new PageInfo<>(courses);
+        return res;
+    }
+
+
 }

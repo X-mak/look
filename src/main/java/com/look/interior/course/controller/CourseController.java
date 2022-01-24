@@ -3,6 +3,7 @@ package com.look.interior.course.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.look.common.Result;
+import com.look.entity.Comments;
 import com.look.entity.Publish;
 import com.look.interior.course.service.CourseService;
 import com.look.entity.Course;
@@ -92,4 +93,47 @@ public class CourseController {
         long total = res.getTotal();
         return Result.success(res.getList(),total+"");
     }
+
+    @PostMapping("/comments")
+    public Result<?> addComment(@RequestBody Comments comments){
+        int res = courseService.addComment(comments);
+        if(res == -1)return Result.error("400","评论失败!");
+        return Result.success("评论成功!");
+    }
+
+    @GetMapping("/comments/{pageNum}")
+    public Result<?> getComments(@PathVariable Integer pageNum,@RequestParam Integer id,
+                                 @RequestParam String userAccount,@RequestParam Integer pageSize,
+                                 @RequestParam String order){
+        List<Comments> comments = courseService.getComments(id, order, userAccount);
+        PageHelper.startPage(pageNum,pageSize,true);
+        PageInfo<Comments> res = new PageInfo<>(comments);
+        long total = res.getTotal();
+        return Result.success(res.getList(),total+"");
+    }
+
+    @DeleteMapping("/comments")
+    public Result<?> deleteComments(@RequestParam Integer id){
+        int res = courseService.deleteComment(id);
+        if(res == -1)return Result.error("400","删除失败!");
+        return Result.success("删除成功!");
+    }
+
+
+
+    @PostMapping("/history")
+    public Result<?> watchedCourse(@RequestParam Integer id,@RequestParam String userAccount){
+        int res = courseService.watchedCourse(userAccount, id);
+        if(res == -1)return Result.error("400","记录失败!");
+        return Result.success("记录成功!");
+    }
+
+    @GetMapping("/history/{pageNum}")
+    public Result<?> getHistory(@PathVariable Integer pageNum,@RequestParam String userAccount,
+                                @RequestParam Integer pageSize){
+        PageInfo<Course> watchHistory = courseService.getWatchHistory(userAccount, pageNum, pageSize);
+        long total = watchHistory.getTotal();
+        return Result.success(watchHistory.getList(),total+"");
+    }
+
 }

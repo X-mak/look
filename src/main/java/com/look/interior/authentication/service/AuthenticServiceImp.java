@@ -1,14 +1,10 @@
 package com.look.interior.authentication.service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.look.combinedentity.user.LoginUser;
-import com.look.entity.AccountRole;
-import com.look.entity.UserAccount;
-import com.look.entity.UserInfo;
-import com.look.entity.UserRole;
-import com.look.mapper.AccountRoleMapper;
-import com.look.mapper.UserAccountMapper;
-import com.look.mapper.UserInfoMapper;
-import com.look.mapper.UserRoleMapper;
+import com.look.entity.*;
+import com.look.mapper.*;
 import com.look.utils.Encode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +29,9 @@ public class AuthenticServiceImp implements AuthenticService{
     AccountRoleMapper accountRoleMapper;
 
     @Autowired
+    SubscribeMapper subscribeMapper;
+
+    @Autowired
     Encode encode;
 
     public int addAccount(UserAccount userAccount, Integer role , UserInfo userInfo){
@@ -48,7 +47,6 @@ public class AuthenticServiceImp implements AuthenticService{
             //数据库操作
             userInfo.setCoins(0);
             userInfo.setFans(0);
-            userInfo.setFollowed(0);
             userAccountMapper.insertSelective(userAccount);
             userInfoMapper.insertSelective(userInfo);
             AccountRole accountRole = new AccountRole(role,userAccount.getUserAccount());
@@ -143,4 +141,48 @@ public class AuthenticServiceImp implements AuthenticService{
         return new LoginUser(userInfo,ans);
 
     }
+
+
+    public int subscribeSomeone(Subscribe subscribe){
+        try{
+            subscribeMapper.insertSelective(subscribe);
+            UserInfo userInfo = userInfoMapper.selectByPrimaryKey(subscribe.getMainAccount());
+            userInfo.setFans(userInfo.getFans()+1);
+            userInfoMapper.updateByPrimaryKeySelective(userInfo);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+        return 1;
+    }
+
+    public int cancelSubscribe(Integer id,String mainAccount){
+        try{
+            subscribeMapper.deleteByPrimaryKey(id);
+            UserInfo userInfo = userInfoMapper.selectByPrimaryKey(mainAccount);
+            userInfo.setFans(userInfo.getFans()-1);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+        return 1;
+    }
+
+    public PageInfo<UserInfo> getSubscribeList(String userAccount, Integer pageNum, Integer pageSize){
+        List<UserInfo> userInfos = userInfoMapper.queryMyLikes(userAccount);
+        PageHelper.startPage(pageNum,pageSize,true);
+        PageInfo<UserInfo> res = new PageInfo<>(userInfos);
+        return res;
+    }
+
+
+    public int checkSubscribed(String mainAccount,String followAccount){
+        Example example = new Example(Subscribe.class);
+        example.createCriteria().andEqualTo("mainAccount",mainAccount).andEqualTo("followAccount",followAccount);
+        List<Subscribe> subscribes = subscribeMapper.selectByExample(example);
+        if(subscribes.size() == 0)return -1;
+        return 1;
+    }
+
+
 }

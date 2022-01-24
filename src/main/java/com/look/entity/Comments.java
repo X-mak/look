@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Data
@@ -23,6 +24,8 @@ public class Comments {
     private String context;
     private String date;
     private Integer hot;
+    @Transient
+    private boolean own;
 
     public Comments(String userAccount, Integer courseId, Integer star, String context) {
         this.userAccount = userAccount;
@@ -31,5 +34,9 @@ public class Comments {
         this.context = context;
         this.date = DateUtil.now();
         this.hot = 0;
+    }
+
+    public void setOwn(boolean own) {
+        this.own = own;
     }
 }

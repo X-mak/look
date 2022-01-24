@@ -15,7 +15,4 @@ public interface ManageService {
 
     public int checkSign(String userAccount,String date);
 
-    public int addComments(Comments comments);
-
-    public List<Comments> getAllComments(String order);
 }

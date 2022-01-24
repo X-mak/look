@@ -20,5 +20,4 @@ public class UserInfo {
     private String userImg;
     private Integer coins;
     private Integer fans;
-    private Integer followed;
 }
