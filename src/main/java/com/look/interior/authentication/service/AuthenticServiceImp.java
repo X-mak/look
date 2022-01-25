@@ -161,6 +161,7 @@ public class AuthenticServiceImp implements AuthenticService{
             subscribeMapper.deleteByPrimaryKey(id);
             UserInfo userInfo = userInfoMapper.selectByPrimaryKey(mainAccount);
             userInfo.setFans(userInfo.getFans()-1);
+            userInfoMapper.updateByPrimaryKeySelective(userInfo);
         }catch (Exception e){
             e.printStackTrace();
             return -1;
@@ -169,8 +170,8 @@ public class AuthenticServiceImp implements AuthenticService{
     }
 
     public PageInfo<UserInfo> getSubscribeList(String userAccount, Integer pageNum, Integer pageSize){
-        List<UserInfo> userInfos = userInfoMapper.queryMyLikes(userAccount);
         PageHelper.startPage(pageNum,pageSize,true);
+        List<UserInfo> userInfos = userInfoMapper.queryMyLikes(userAccount);
         PageInfo<UserInfo> res = new PageInfo<>(userInfos);
         return res;
     }

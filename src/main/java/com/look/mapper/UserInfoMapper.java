@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface UserInfoMapper extends Mapper<UserInfo> {
 
-    @Select("SELECT u.* FROM userinfo u LEFT JOIN subscribe s ON u.user_account = s.follow_account WHERE s.follow_account = #{userAccount}")
+    @Select("SELECT u.* FROM userinfo u LEFT JOIN subscribe s ON u.user_account = s.main_account WHERE s.follow_account = #{userAccount}")
     @Results(id = "singleUser",value = {
             @Result(id = true,column = "user_account",property = "userAccount"),
             @Result(column = "user_name",property = "userName"),

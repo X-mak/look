@@ -26,6 +26,8 @@ public class Comments {
     private Integer hot;
     @Transient
     private boolean own;
+    @Transient
+    private boolean liked;
 
     public Comments(String userAccount, Integer courseId, Integer star, String context) {
         this.userAccount = userAccount;
@@ -38,5 +40,9 @@ public class Comments {
 
     public void setOwn(boolean own) {
         this.own = own;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 }

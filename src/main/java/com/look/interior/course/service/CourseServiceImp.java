@@ -33,6 +33,9 @@ public class CourseServiceImp implements CourseService{
     @Autowired
     HistoryMapper historyMapper;
 
+    @Autowired
+    LikesMapper likesMapper;
+
     public int addCourse(String userAccount,Course course){
 
         try{
@@ -162,9 +165,35 @@ public class CourseServiceImp implements CourseService{
         return 1;
     }
 
+    public int likeComment(Likes likes){
+        try{
+            likesMapper.insertSelective(likes);
+            Comments comments = commentsMapper.selectByPrimaryKey(likes.getCommentId());
+            comments.setHot(comments.getHot()+1);
+            commentsMapper.updateByPrimaryKeySelective(comments);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+        return 1;
+    }
+
+    public int cancelLikes(Integer commentId,String userAccount){
+        try{
+            Example example = new Example(Likes.class);
+            example.createCriteria().andEqualTo("commentId",commentId).andEqualTo("userAccount",userAccount);
+            likesMapper.deleteByExample(example);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+        return 1;
+    }
+
     public PageInfo<Course> getWatchHistory(String userAccount,Integer pageNum,Integer pageSize){
-        List<Course> courses = courseMapper.queryHistoryCourse(userAccount);
         PageHelper.startPage(pageNum,pageSize,true);
+        List<Course> courses = courseMapper.queryHistoryCourse(userAccount);
+
         PageInfo<Course> res = new PageInfo<>(courses);
         return res;
     }

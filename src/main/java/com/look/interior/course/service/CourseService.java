@@ -3,6 +3,7 @@ package com.look.interior.course.service;
 import com.github.pagehelper.PageInfo;
 import com.look.entity.Comments;
 import com.look.entity.Course;
+import com.look.entity.Likes;
 
 
 import java.util.List;
@@ -30,6 +31,8 @@ public interface CourseService {
     public int watchedCourse(String userAccount,Integer courseId);
 
     public int deleteComment(Integer id);
+
+    public int likeComment(Likes likes);
 
     public PageInfo<Course> getWatchHistory(String userAccount,Integer pageNum,Integer pageSize);
 
