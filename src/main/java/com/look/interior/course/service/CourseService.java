@@ -28,6 +28,8 @@ public interface CourseService {
 
     public List<Comments> getComments(Integer id,String order,String userAccount);
 
+    public int getStars(Integer courseId,String userAccount);
+
     public int watchedCourse(String userAccount,Integer courseId);
 
     public int deleteComment(Integer id);

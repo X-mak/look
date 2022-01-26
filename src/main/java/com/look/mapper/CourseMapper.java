@@ -72,11 +72,12 @@ public interface CourseMapper extends Mapper<Course> {
             @Result(column = "course_video",property = "courseVideo"),
             @Result(column = "course_img",property = "courseImg"),
             @Result(column = "user_account",property = "userInfo",
-                    one = @One(select = "com.look.mapper.UserInfoMapper.selectByPrimaryKey"))
+                    one = @One(select = "com.look.mapper.UserInfoMapper.queryOneUserInfo",
+                            fetchType = FetchType.EAGER))
     })
     Course querySingleCourse(Integer id);
 
-    @Select("SELECT c.* FROM course c LEFT JOIN history h ON c.id = h.course_id WHERE h.user_account = #{userAccount}")
+    @Select("SELECT c.* FROM course c LEFT JOIN history h ON c.id = h.course_id WHERE h.user_account = #{userAccount} ORDER BY h.date DESC")
     @ResultMap(value = "oneCourse")
     List<Course> queryHistoryCourse(String userAccount);
 }

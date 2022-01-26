@@ -65,8 +65,8 @@ public class AuthenticController {
     }
 
     @GetMapping
-    public Result<?> getAccount(@RequestParam String userName){
-        LoginUser loginUser = authenticService.getUser(userName);
+    public Result<?> getAccount(@RequestParam String userAccount){
+        LoginUser loginUser = authenticService.getUser(userAccount);
         if(loginUser.getUserRole().size() == 0){
             return Result.error("400","没有该账号");
         }

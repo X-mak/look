@@ -26,10 +26,17 @@ public class Course {
     private CourseClass courseClass;
     @Transient
     private UserInfo userInfo;
+    @Transient
+    private Double ranks;
 
     public Course(String courseName, String courseVideo, String courseImg) {
         this.courseName = courseName;
         this.courseVideo = courseVideo;
         this.courseImg = courseImg;
     }
+
+    public void setRanks(Double ranks) {
+        this.ranks = ranks;
+    }
+
 }

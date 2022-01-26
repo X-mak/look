@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.catalina.User;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -28,6 +29,8 @@ public class Comments {
     private boolean own;
     @Transient
     private boolean liked;
+    @Transient
+    private UserInfo userInfo;
 
     public Comments(String userAccount, Integer courseId, Integer star, String context) {
         this.userAccount = userAccount;

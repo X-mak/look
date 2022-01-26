@@ -120,6 +120,13 @@ public class CourseController {
         return Result.success("删除成功!");
     }
 
+    @GetMapping("/comments/star")
+    public Result<?> getCommentStars(@RequestParam String userAccount,@RequestParam Integer courseId){
+        int stars = courseService.getStars(courseId, userAccount);
+        if(stars == -1)return Result.error("400","还没有评分");
+        return Result.success(stars,"已评分");
+    }
+
     @PostMapping("/comments/like")
     public Result<?> likeComments(@RequestBody Likes likes){
         int res = courseService.likeComment(likes);

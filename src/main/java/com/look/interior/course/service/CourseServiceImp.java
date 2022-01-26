@@ -83,6 +83,16 @@ public class CourseServiceImp implements CourseService{
 
     public Course getCourseById(Integer id){
         Course course = courseMapper.querySingleCourse(id);
+        Example example = new Example(Comments.class);
+        example.createCriteria().andEqualTo("courseId",id);
+        List<Comments> comments = commentsMapper.selectByExample(example);
+        int sum = 0;
+        int size = comments.size();
+        if(size == 0)return  course;
+        for(Comments c:comments){
+            sum += c.getStar();
+        }
+        course.setRanks((double) (sum/size));
         return course;
     }
 
@@ -146,6 +156,12 @@ public class CourseServiceImp implements CourseService{
     public int watchedCourse(String userAccount,Integer courseId){
         History history = new History(userAccount,courseId);
         try{
+            Example example = new Example(History.class);
+            example.createCriteria().andEqualTo("userAccount",userAccount).andEqualTo("courseId",courseId);
+            List<History> histories = historyMapper.selectByExample(example);
+            if(histories.size() == 1){
+                historyMapper.deleteByPrimaryKey(histories.get(0).getId());
+            }
             history.setDate(DateUtil.now());
             historyMapper.insertSelective(history);
         }catch (Exception e){
@@ -153,6 +169,16 @@ public class CourseServiceImp implements CourseService{
             return -1;
         }
         return 1;
+    }
+
+    public int getStars(Integer courseId,String userAccount){
+        Example example = new Example(Comments.class);
+        example.createCriteria().andEqualTo("userAccount",userAccount).andEqualTo("courseId",courseId);
+        List<Comments> comments = commentsMapper.selectByExample(example);
+        if(comments.size() == 0){
+            return -1;
+        }
+        return comments.get(0).getStar();
     }
 
     public int deleteComment(Integer id){
