@@ -115,5 +115,7 @@ public class ManageServiceImp implements ManageService{
         return 1;
     }
 
-
+    public List<Course> test(){
+        return courseMapper.queryCoursesInfo();
+    }
 }

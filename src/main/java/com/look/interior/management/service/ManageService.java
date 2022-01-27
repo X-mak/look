@@ -15,4 +15,5 @@ public interface ManageService {
 
     public int checkSign(String userAccount,String date);
 
+    public List<Course> test();
 }

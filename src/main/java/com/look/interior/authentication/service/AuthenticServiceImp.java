@@ -156,9 +156,11 @@ public class AuthenticServiceImp implements AuthenticService{
         return 1;
     }
 
-    public int cancelSubscribe(Integer id,String mainAccount){
+    public int cancelSubscribe(String mainAccount,String followAccount){
         try{
-            subscribeMapper.deleteByPrimaryKey(id);
+            Example example = new Example(Subscribe.class);
+            example.createCriteria().andEqualTo("mainAccount",mainAccount).andEqualTo("followAccount",followAccount);
+            subscribeMapper.deleteByExample(example);
             UserInfo userInfo = userInfoMapper.selectByPrimaryKey(mainAccount);
             userInfo.setFans(userInfo.getFans()-1);
             userInfoMapper.updateByPrimaryKeySelective(userInfo);

@@ -150,4 +150,11 @@ public class CourseController {
         return Result.success(watchHistory.getList(),total+"");
     }
 
+    @GetMapping("/random")
+    public Result<?> random(@RequestParam String age,@RequestParam Integer limit){
+        if(age.equals(""))age="%";
+        List<Course> courses = courseService.recommendCourses(age, limit);
+        return Result.success(courses,"查询成功!");
+    }
+
 }

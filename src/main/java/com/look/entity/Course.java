@@ -28,6 +28,10 @@ public class Course {
     private UserInfo userInfo;
     @Transient
     private Double ranks;
+    @Transient
+    private String userName;
+    @Transient
+    private String publishDate;
 
     public Course(String courseName, String courseVideo, String courseImg) {
         this.courseName = courseName;

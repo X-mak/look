@@ -26,7 +26,7 @@ public interface AuthenticService {
     //关注功能相关
     public int subscribeSomeone(Subscribe subscribe);
 
-    public int cancelSubscribe(Integer id,String mainAccount);
+    public int cancelSubscribe(String mainAccount,String followAccount);
 
     public PageInfo<UserInfo> getSubscribeList(String userAccount,Integer pageNum,Integer pageSize);
 

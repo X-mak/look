@@ -224,5 +224,9 @@ public class CourseServiceImp implements CourseService{
         return res;
     }
 
+    public List<Course> recommendCourses(String age,Integer limit){
+        List<Course> courses = courseMapper.queryRandCourses(age, limit);
+        return courses;
+    }
 
 }

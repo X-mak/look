@@ -81,8 +81,8 @@ public class AuthenticController {
     }
 
     @DeleteMapping("/subscribe")
-    public Result<?> cancelSubscribe(@RequestParam Integer id,@RequestParam String mainAccount){
-        int res = authenticService.cancelSubscribe(id, mainAccount);
+    public Result<?> cancelSubscribe(@RequestParam String mainAccount,@RequestParam String followAccount){
+        int res = authenticService.cancelSubscribe(mainAccount, followAccount);
         if(res == -1)return Result.error("400","取关失败!");
         return Result.success("取关成功!");
     }
