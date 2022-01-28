@@ -5,25 +5,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
-@Table(name = "buy")
-public class Buy {
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "likes")
+public class Likes {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private Integer commentId;
     private String userAccount;
-    private Integer courseId;
     private String date;
-    @Transient
-    private Course course;
-    public Buy(String userAccount, Integer courseId) {
+
+    public Likes(Integer commentId, String userAccount) {
+        this.commentId = commentId;
         this.userAccount = userAccount;
-        this.courseId = courseId;
         this.date = DateUtil.now();
     }
 }

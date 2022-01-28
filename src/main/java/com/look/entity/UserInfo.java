@@ -19,4 +19,5 @@ public class UserInfo {
     private String userName;
     private String userImg;
     private Integer coins;
+    private Integer fans;
 }

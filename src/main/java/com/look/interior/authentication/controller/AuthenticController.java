@@ -1,5 +1,7 @@
 package com.look.interior.authentication.controller;
 
+import com.github.pagehelper.PageInfo;
+import com.look.entity.Subscribe;
 import com.look.entity.UserInfo;
 import com.look.interior.authentication.service.AuthenticService;
 import com.look.combinedentity.user.LoginUser;
@@ -63,11 +65,39 @@ public class AuthenticController {
     }
 
     @GetMapping
-    public Result<?> getAccount(@RequestParam String userName){
-        LoginUser loginUser = authenticService.getUser(userName);
+    public Result<?> getAccount(@RequestParam String userAccount){
+        LoginUser loginUser = authenticService.getUser(userAccount);
         if(loginUser.getUserRole().size() == 0){
             return Result.error("400","没有该账号");
         }
         return Result.success(loginUser,"查询成功!");
+    }
+
+    @PostMapping("/subscribe")
+    public Result<?> subscribeSomeone(@RequestBody Subscribe subscribe){
+        int res = authenticService.subscribeSomeone(subscribe);
+        if(res == -1)return Result.error("400","关注失败!");
+        return Result.success("关注成功!");
+    }
+
+    @DeleteMapping("/subscribe")
+    public Result<?> cancelSubscribe(@RequestParam String mainAccount,@RequestParam String followAccount){
+        int res = authenticService.cancelSubscribe(mainAccount, followAccount);
+        if(res == -1)return Result.error("400","取关失败!");
+        return Result.success("取关成功!");
+    }
+
+    @GetMapping("/subscribe/{pageNum}")
+    public Result<?> getSubscribeList(@RequestParam String userAccount,@RequestParam Integer pageSize,@PathVariable Integer pageNum){
+        PageInfo<UserInfo> subscribeList = authenticService.getSubscribeList(userAccount, pageNum, pageSize);
+        long total = subscribeList.getTotal();
+        return Result.success(subscribeList.getList(),total+"");
+    }
+
+    @GetMapping("/subscribe/valid")
+    public Result<?> checkValidity(@RequestParam String mainAccount,@RequestParam String followAccount){
+        int res = authenticService.checkSubscribed(mainAccount, followAccount);
+        if(res == -1)return Result.error("400","未关注!");
+        return Result.success("已关注!");
     }
 }

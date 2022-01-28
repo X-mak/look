@@ -1,14 +1,8 @@
 package com.look.interior.management.service;
 
 import cn.hutool.core.date.DateUtil;
-import com.look.entity.Buy;
-import com.look.entity.Course;
-import com.look.entity.SignRecord;
-import com.look.entity.UserInfo;
-import com.look.mapper.BuyMapper;
-import com.look.mapper.CourseMapper;
-import com.look.mapper.SignRecordMapper;
-import com.look.mapper.UserInfoMapper;
+import com.look.entity.*;
+import com.look.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -30,6 +24,12 @@ public class ManageServiceImp implements ManageService{
 
     @Autowired
     CourseMapper courseMapper;
+
+    @Autowired
+    CommentsMapper commentsMapper;
+
+    @Autowired
+    SubscribeMapper subscribeMapper;
 
     public int everydaySign(String userAccount){
         //登陆奖励
@@ -68,6 +68,9 @@ public class ManageServiceImp implements ManageService{
             userInfoMapper.updateByPrimaryKeySelective(userInfo);
             Buy buy = new Buy(userAccount,courseId);
             buyMapper.insertSelective(buy);
+            Integer clicks = course.getClicks();
+            course.setClicks(clicks+1);
+            courseMapper.updateByPrimaryKeySelective(course);
         }catch (Exception e){
             e.printStackTrace();
             return -1;
@@ -94,14 +97,7 @@ public class ManageServiceImp implements ManageService{
         return 1;
     }
 
-    public List<Course> getBoughtCourses(String userAccount){
-        List<Buy> buys = buyMapper.queryForCourses(userAccount);
-        List<Course> ans = new ArrayList<>();
-        for (Buy buy : buys){
-            ans.add(buy.getCourse());
-        }
-        return  ans;
-    }
+
 
 
     public int checkSign(String userAccount,String date){
@@ -117,5 +113,9 @@ public class ManageServiceImp implements ManageService{
             return -1;
         }
         return 1;
+    }
+
+    public List<Course> test(){
+        return courseMapper.queryCoursesInfo();
     }
 }

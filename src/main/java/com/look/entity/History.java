@@ -1,5 +1,6 @@
 package com.look.entity;
 
+import cn.hutool.core.date.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,11 @@ public class History {
     private Integer id;
     private String userAccount;
     private Integer courseId;
-    private Date date;
+    private String date;
+
+    public History(String userAccount, Integer courseId) {
+        this.userAccount = userAccount;
+        this.courseId = courseId;
+        this.date = DateUtil.now();
+    }
 }

@@ -1,5 +1,6 @@
 package com.look.interior.management.service;
 
+import com.look.entity.Comments;
 import com.look.entity.Course;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface ManageService {
 
     public int validCourse(Integer courseId,String userAccount);
 
-    public List<Course> getBoughtCourses(String userAccount);
-
     public int checkSign(String userAccount,String date);
+
+    public List<Course> test();
 }

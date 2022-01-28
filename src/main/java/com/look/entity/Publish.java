@@ -24,7 +24,7 @@ public class Publish {
     private Integer courseId;
     private String publishDate;
     @Transient
-    private List<Course> courses;
+    private Course course;
 
     public Publish(String userAccount, Integer courseId) {
         this.userAccount = userAccount;

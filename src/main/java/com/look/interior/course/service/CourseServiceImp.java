@@ -1,13 +1,10 @@
 package com.look.interior.course.service;
 
-import com.look.entity.Buy;
-import com.look.entity.Course;
-import com.look.entity.CourseClass;
-import com.look.entity.Publish;
-import com.look.mapper.BuyMapper;
-import com.look.mapper.CourseClassMapper;
-import com.look.mapper.CourseMapper;
-import com.look.mapper.PublishMapper;
+import cn.hutool.core.date.DateUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.look.entity.*;
+import com.look.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -29,6 +26,15 @@ public class CourseServiceImp implements CourseService{
 
     @Autowired
     BuyMapper buyMapper;
+
+    @Autowired
+    CommentsMapper commentsMapper;
+
+    @Autowired
+    HistoryMapper historyMapper;
+
+    @Autowired
+    LikesMapper likesMapper;
 
     public int addCourse(String userAccount,Course course){
 
@@ -54,9 +60,10 @@ public class CourseServiceImp implements CourseService{
     }
 
 
-    public List<Course> getOnesCourse(String userAccount,int status){
-        Publish publish = publishMapper.queryPublishedCourse(userAccount, status);
-        return publish.getCourses();
+    public List<Course> getOnesCourse(String userAccount,String status){
+        if(status.equals(""))status="%";
+        List<Course> courses = courseMapper.queryPublishCourse(userAccount, status);
+        return courses;
     }
 
 
@@ -75,41 +82,151 @@ public class CourseServiceImp implements CourseService{
     }
 
     public Course getCourseById(Integer id){
-        Course course = courseMapper.selectByPrimaryKey(id);
-        course.setCourseClass(courseClassMapper.selectByPrimaryKey(id));
+        Course course = courseMapper.querySingleCourse(id);
+        Example example = new Example(Comments.class);
+        example.createCriteria().andEqualTo("courseId",id);
+        List<Comments> comments = commentsMapper.selectByExample(example);
+        int sum = 0;
+        int size = comments.size();
+        if(size == 0)return  course;
+        for(Comments c:comments){
+            sum += c.getStar();
+        }
+        course.setRanks((double) (sum/size));
         return course;
     }
 
-    public List<Course> getAllCourse(String keyword,String order){
+    public List<Course> getAllCourse(String keyword,String order,String age,String subject){
         List<Course> courses = null;
         if(keyword.equals("")){
             if(order.equals("")){
-                courses = courseMapper.queryCourseInfo();
+                courses = courseMapper.queryCourseInfo(age, subject);
             }else{
-                courses = courseMapper.queryCourseInfoByClicks(order);
+                courses = courseMapper.queryCourseInfoByClicks(order,age,subject);
             }
         }else {
             if(order.equals("")){
-                courses = courseMapper.queryCourseInfoByKeyword(keyword);
+                courses = courseMapper.queryCourseInfoByKeyword(keyword,age,subject);
             }else{
-                courses = courseMapper.queryCourseInfoByKeywordClicks(keyword, order);
+                courses = courseMapper.queryCourseInfoByKeywordClicks(keyword, order,age,subject);
             }
         }
         return courses;
     }
 
-    public List<Course> getClassCourse(String age,String subject,String order){
-        List<Course> courses = null;
-        if(order.equals("")){
-            courses = courseMapper.queryCourseByClass(age, subject);
-        }else{
-            courses = courseMapper.queryCourseByClassClicks(age, subject, order);
-        }
-        return courses;
-    }
 
     public List<Course> getCourseByStatus(Integer status){
         List<Course> courses = courseMapper.queryCourseByStatus(status);
         return courses;
     }
+
+    public List<Course> getBoughtCourse(String userAccount){
+        List<Course> courses = courseMapper.queryBoughtCourse(userAccount);
+        return courses;
+    }
+
+    public int addComment(Comments comments){
+        try{
+            comments.setDate(DateUtil.now());
+            comments.setHot(0);
+            commentsMapper.insertSelective(comments);
+        }catch (Exception e){
+            return -1;
+        }
+        return 1;
+    }
+
+    public List<Comments> getComments(Integer id,String order,String userAccount){
+        List<Comments> comments = new ArrayList<>();
+        if(order.equals("date")){
+            comments = commentsMapper.queryCommentsOrderByTime(id);
+        }else if(order.equals("hot")){
+            comments = commentsMapper.queryCommentsOrderByHot(id);
+        }
+        if(!userAccount.equals("")){
+            for (Comments c:comments){
+                if(c.getUserAccount().equals(userAccount)){
+                    c.setOwn(true);
+                }
+            }
+        }
+        return comments;
+    }
+
+    public int watchedCourse(String userAccount,Integer courseId){
+        History history = new History(userAccount,courseId);
+        try{
+            Example example = new Example(History.class);
+            example.createCriteria().andEqualTo("userAccount",userAccount).andEqualTo("courseId",courseId);
+            List<History> histories = historyMapper.selectByExample(example);
+            if(histories.size() == 1){
+                historyMapper.deleteByPrimaryKey(histories.get(0).getId());
+            }
+            history.setDate(DateUtil.now());
+            historyMapper.insertSelective(history);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+        return 1;
+    }
+
+    public int getStars(Integer courseId,String userAccount){
+        Example example = new Example(Comments.class);
+        example.createCriteria().andEqualTo("userAccount",userAccount).andEqualTo("courseId",courseId);
+        List<Comments> comments = commentsMapper.selectByExample(example);
+        if(comments.size() == 0){
+            return -1;
+        }
+        return comments.get(0).getStar();
+    }
+
+    public int deleteComment(Integer id){
+        try{
+            commentsMapper.deleteByPrimaryKey(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+        return 1;
+    }
+
+    public int likeComment(Likes likes){
+        try{
+            likesMapper.insertSelective(likes);
+            Comments comments = commentsMapper.selectByPrimaryKey(likes.getCommentId());
+            comments.setHot(comments.getHot()+1);
+            commentsMapper.updateByPrimaryKeySelective(comments);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+        return 1;
+    }
+
+    public int cancelLikes(Integer commentId,String userAccount){
+        try{
+            Example example = new Example(Likes.class);
+            example.createCriteria().andEqualTo("commentId",commentId).andEqualTo("userAccount",userAccount);
+            likesMapper.deleteByExample(example);
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
+        return 1;
+    }
+
+    public PageInfo<Course> getWatchHistory(String userAccount,Integer pageNum,Integer pageSize){
+        PageHelper.startPage(pageNum,pageSize,true);
+        List<Course> courses = courseMapper.queryHistoryCourse(userAccount);
+
+        PageInfo<Course> res = new PageInfo<>(courses);
+        return res;
+    }
+
+    public List<Course> recommendCourses(String age,Integer limit){
+        List<Course> courses = courseMapper.queryRandCourses(age, limit);
+        return courses;
+    }
+
 }
