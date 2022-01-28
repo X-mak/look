@@ -32,6 +32,8 @@ public class Course {
     private String userName;
     @Transient
     private String publishDate;
+    @Transient
+    private String age;
 
     public Course(String courseName, String courseVideo, String courseImg) {
         this.courseName = courseName;

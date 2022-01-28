@@ -39,21 +39,29 @@ public interface CourseMapper extends Mapper<Course> {
     @ResultMap(value = "courseInfo")
     List<Course> queryBoughtCourse(String userAccount);
 
-    @Select("SELECT c.* ,u.*,publish_date FROM course c LEFT JOIN publish p ON p.course_id=c.id LEFT JOIN userinfo u ON u.user_account=p.user_account WHERE c.id=#{id}")
-    @Results(id = "courseAndUser",value = {
+    @Select("SELECT c.* ,u.*,publish_date,cs.age FROM course c LEFT JOIN publish p ON p.course_id=c.id LEFT JOIN userinfo u ON u.user_account=p.user_account left join courseclass cs on c.id=cs.id WHERE c.id=#{id}")
+    @Results(id = "courseUserClass",value = {
             @Result(id = true,column = "id",property = "id"),
             @Result(column = "course_name",property = "courseName"),
             @Result(column = "course_video",property = "courseVideo"),
             @Result(column = "course_img",property = "courseImg"),
             @Result(column = "publish_date",property = "publishDate"),
+            @Result(column = "age",property = "age"),
             @Result(column = "user_account",property = "userInfo",
                     one = @One(select = "com.look.mapper.UserInfoMapper.selectByPrimaryKey",
                             fetchType = FetchType.EAGER))
     })
     Course querySingleCourse(Integer id);
 
-    @Select("SELECT c.*,p.publish_date,u.user_name FROM course c LEFT JOIN history h ON c.id = h.course_id left join publish p on c.id=p.course_id left join userinfo u on u.user_account=p.user_account WHERE h.user_account = #{userAccount} ORDER BY h.date DESC")
-    @ResultMap(value = "courseInfo")
+    @Select("SELECT c.*,h.date,u.user_name FROM course c LEFT JOIN history h ON c.id = h.course_id  left join userinfo u on u.user_account=h.user_account WHERE h.user_account = #{userAccount} ORDER BY h.date DESC")
+    @Results(id = "historyCourseInfo",value = {
+            @Result(id = true,column = "id",property = "id"),
+            @Result(column = "course_name",property = "courseName"),
+            @Result(column = "course_video",property = "courseVideo"),
+            @Result(column = "course_img",property = "courseImg"),
+            @Result(column = "date",property = "publishDate"),
+            @Result(column = "user_name",property = "userName"),
+    })
     List<Course> queryHistoryCourse(String userAccount);
 
     @Select("select c.*,p.publish_date,u.user_name from course c left join publish p on c.id=p.course_id left join userinfo u on u.user_account=p.user_account")
