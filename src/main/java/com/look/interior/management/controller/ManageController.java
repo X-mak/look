@@ -50,6 +50,12 @@ public class ManageController {
         return Result.success("可以观看!");
     }
 
-
+    @GetMapping("/subscribe/course/{pageNum}")
+    public Result<?> subscribeUpdated(@RequestParam String userAccount,@PathVariable Integer pageNum,
+                                      @RequestParam Integer pageSize){
+        PageInfo<Course> coursePageInfo = manageService.subscribeUpdated(userAccount, pageNum, pageSize);
+        long total = coursePageInfo.getTotal();
+        return Result.success(coursePageInfo.getList(),total+"");
+    }
 
 }

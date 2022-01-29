@@ -32,4 +32,5 @@ public interface AuthenticService {
 
     public int checkSubscribed(String mainAccount,String followAccount);
 
+    public int countSubscribe(String userAccount);
 }

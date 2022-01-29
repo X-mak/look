@@ -78,4 +78,8 @@ public interface CourseMapper extends Mapper<Course> {
     @Select("SELECT c.*,p.publish_date,u.user_name FROM course c LEFT JOIN publish p ON c.id=p.course_id LEFT JOIN userinfo u ON u.user_account=p.user_account LEFT JOIN courseclass cs ON c.id=cs.id WHERE cs.age LIKE #{age} ORDER BY RAND() LIMIT #{limit}")
     @ResultMap(value = "courseInfo")
     List<Course> queryRandCourses(String age,Integer limit);
+
+    @Select("SELECT c.*,u.user_name,p.publish_date FROM course c LEFT JOIN publish p ON p.course_id=c.id LEFT JOIN userinfo u ON u.user_account=p.user_account LEFT JOIN subscribe s ON s.main_account=u.user_account WHERE p.publish_date >= s.date AND s.follow_account=#{userAccount} ORDER BY p.publish_date DESC")
+    @ResultMap(value = "courseInfo")
+    List<Course> queryUpdatedCourses(String userAccount);
 }

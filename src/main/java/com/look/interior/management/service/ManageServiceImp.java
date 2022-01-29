@@ -1,6 +1,8 @@
 package com.look.interior.management.service;
 
 import cn.hutool.core.date.DateUtil;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.look.entity.*;
 import com.look.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,5 +119,12 @@ public class ManageServiceImp implements ManageService{
 
     public List<Course> test(){
         return courseMapper.queryCoursesInfo();
+    }
+
+    public PageInfo<Course> subscribeUpdated(String userAccount,Integer pageNum,Integer pageSize){
+        PageHelper.startPage(pageNum,pageSize,true);
+        List<Course> courses = courseMapper.queryUpdatedCourses(userAccount);
+        PageInfo<Course> res = new PageInfo<>(courses);
+        return res;
     }
 }

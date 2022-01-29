@@ -19,7 +19,7 @@ public class Subscribe {
     private Integer id;
     private String mainAccount;
     private String followAccount;
-
+    private String date;
 
     public Subscribe(String mainAccount, String followAccount) {
         this.mainAccount = mainAccount;

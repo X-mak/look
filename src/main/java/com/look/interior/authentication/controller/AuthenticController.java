@@ -100,4 +100,10 @@ public class AuthenticController {
         if(res == -1)return Result.error("400","未关注!");
         return Result.success("已关注!");
     }
+
+    @GetMapping("/subscribe/count")
+    public Result<?> getCount(@RequestParam String userAccount){
+        int res = authenticService.countSubscribe(userAccount);
+        return Result.success(res,"查询成功!");
+    }
 }

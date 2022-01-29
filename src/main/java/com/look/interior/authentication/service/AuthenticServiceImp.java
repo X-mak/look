@@ -1,5 +1,6 @@
 package com.look.interior.authentication.service;
 
+import cn.hutool.core.date.DateUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.look.combinedentity.user.LoginUser;
@@ -145,6 +146,7 @@ public class AuthenticServiceImp implements AuthenticService{
 
     public int subscribeSomeone(Subscribe subscribe){
         try{
+            subscribe.setDate(DateUtil.now());
             subscribeMapper.insertSelective(subscribe);
             UserInfo userInfo = userInfoMapper.selectByPrimaryKey(subscribe.getMainAccount());
             userInfo.setFans(userInfo.getFans()+1);
@@ -187,5 +189,7 @@ public class AuthenticServiceImp implements AuthenticService{
         return 1;
     }
 
-
+    public int countSubscribe(String userAccount){
+        return subscribeMapper.queryCounts(userAccount);
+    }
 }
