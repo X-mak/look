@@ -8,6 +8,7 @@ import com.look.entity.Likes;
 import com.look.entity.Publish;
 import com.look.interior.course.service.CourseService;
 import com.look.entity.Course;
+import io.github.yedaxia.apidocs.ApiDoc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -155,6 +156,18 @@ public class CourseController {
         if(age.equals(""))age="%";
         List<Course> courses = courseService.recommendCourses(age, limit);
         return Result.success(courses,"查询成功!");
+    }
+
+    /**
+     *
+     * @param order 获取方式
+     * @return
+     */
+    @ApiDoc(stringResult = "{code: 0, data: 'success'}")
+    @GetMapping("/list")
+    public Result<?> getCourseList(@RequestParam String order){
+        List<Course> mainPageCourses = courseService.getMainPageCourses(order);
+        return Result.success(mainPageCourses,"查询成功!");
     }
 
 }

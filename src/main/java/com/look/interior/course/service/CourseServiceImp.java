@@ -229,4 +229,15 @@ public class CourseServiceImp implements CourseService{
         return courses;
     }
 
+    public List<Course> getMainPageCourses(String order){
+        List<Course> courses = new ArrayList<>();
+        if(order.equals("date")){
+            courses = courseMapper.queryRecentCourses();
+        }else if(order.equals("hot")){
+            courses = courseMapper.queryHotCourses();
+        }else if(order.equals("free")){
+            courses = courseMapper.queryFreeCourses();
+        }
+        return courses;
+    }
 }

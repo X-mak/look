@@ -82,4 +82,19 @@ public interface CourseMapper extends Mapper<Course> {
     @Select("SELECT c.*,u.user_name,p.publish_date FROM course c LEFT JOIN publish p ON p.course_id=c.id LEFT JOIN userinfo u ON u.user_account=p.user_account LEFT JOIN subscribe s ON s.main_account=u.user_account WHERE p.publish_date >= s.date AND s.follow_account=#{userAccount} ORDER BY p.publish_date DESC")
     @ResultMap(value = "courseInfo")
     List<Course> queryUpdatedCourses(String userAccount);
+
+    @Select("SELECT c.*,p.publish_date,u.user_name FROM course c LEFT JOIN publish p ON c.id=p.course_id " +
+            "LEFT JOIN userinfo u ON u.user_account=p.user_account ORDER BY p.publish_date DESC LIMIT 4")
+    @ResultMap(value = "courseInfo")
+    List<Course> queryRecentCourses();
+
+    @Select("SELECT c.*,p.publish_date,u.user_name FROM course c LEFT JOIN publish p ON c.id=p.course_id " +
+            "LEFT JOIN userinfo u ON u.user_account=p.user_account ORDER BY c.clicks DESC LIMIT 4")
+    @ResultMap(value = "courseInfo")
+    List<Course> queryHotCourses();
+
+    @Select("SELECT c.*,p.publish_date,u.user_name FROM course c LEFT JOIN publish p ON c.id=p.course_id " +
+            "LEFT JOIN userinfo u ON u.user_account=p.user_account WHERE c.cost=0 ORDER BY RAND() LIMIT 4")
+    @ResultMap(value = "courseInfo")
+    List<Course> queryFreeCourses();
 }

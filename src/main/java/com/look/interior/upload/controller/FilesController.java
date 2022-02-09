@@ -63,7 +63,6 @@ public class FilesController {
                 os = response.getOutputStream();
                 os.write(bytes);
                 os.flush();
-
                 os.close();
             }
         }catch (Exception e){

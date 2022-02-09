@@ -39,4 +39,6 @@ public interface CourseService {
     public PageInfo<Course> getWatchHistory(String userAccount,Integer pageNum,Integer pageSize);
 
     public List<Course> recommendCourses(String age,Integer limit);
+
+    List<Course> getMainPageCourses(String order);
 }

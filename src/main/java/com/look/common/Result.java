@@ -1,5 +1,6 @@
 package com.look.common;
 
+
 public class Result<T> {
     private String code;
     private String msg;
