@@ -97,4 +97,14 @@ public interface CourseMapper extends Mapper<Course> {
             "LEFT JOIN userinfo u ON u.user_account=p.user_account WHERE c.cost=0 ORDER BY RAND() LIMIT 4")
     @ResultMap(value = "courseInfo")
     List<Course> queryFreeCourses();
+
+    @Select("SELECT c.id,c.course_name,c.course_img,p.publish_date FROM course c LEFT JOIN publish p ON " +
+            "p.course_id = c.id WHERE p.user_account=#{userAccount} ORDER BY p.publish_date DESC LIMIT 3")
+    @Results(id = "smallCourse",value = {
+            @Result(id = true,column = "id",property = "id"),
+            @Result(column = "course_name",property = "courseName"),
+            @Result(column = "course_img",property = "courseImg"),
+            @Result(column = "publish_date",property = "publishDate")
+    })
+    List<Course> queryRecentPublishedCourse(String userAccount);
 }

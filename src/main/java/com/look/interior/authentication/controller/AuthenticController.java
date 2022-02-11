@@ -106,4 +106,11 @@ public class AuthenticController {
         int res = authenticService.countSubscribe(userAccount);
         return Result.success(res,"查询成功!");
     }
+
+    @GetMapping("/list/{pageNum}")
+    public Result<?> getSearchedUser(@PathVariable Integer pageNum,@RequestParam Integer pageSize,
+                                     @RequestParam String keyword){
+        PageInfo<UserInfo> searchedList = authenticService.getSearchedList(pageNum, pageSize, keyword);
+        return Result.success(searchedList.getList(),searchedList.getTotal()+"");
+    }
 }

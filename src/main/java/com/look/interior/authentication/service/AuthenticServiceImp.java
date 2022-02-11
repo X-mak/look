@@ -192,4 +192,13 @@ public class AuthenticServiceImp implements AuthenticService{
     public int countSubscribe(String userAccount){
         return subscribeMapper.queryCounts(userAccount);
     }
+
+
+    public PageInfo<UserInfo> getSearchedList(Integer pageNum,Integer pageSize,String keyword){
+        if(keyword.equals(""))keyword="%";
+        else keyword = '%'+keyword+'%';
+        List<UserInfo> userInfos = userInfoMapper.querySelectedUserDown(keyword);
+        PageInfo<UserInfo> res = new PageInfo<>(userInfos);
+        return res;
+    }
 }

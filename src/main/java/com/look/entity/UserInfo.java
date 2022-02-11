@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,4 +22,7 @@ public class UserInfo {
     private String userImg;
     private Integer coins;
     private Integer fans;
+
+    @Transient
+    private List<Course> recentCourse;
 }

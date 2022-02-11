@@ -33,4 +33,8 @@ public interface AuthenticService {
     public int checkSubscribed(String mainAccount,String followAccount);
 
     public int countSubscribe(String userAccount);
+
+
+    //搜索用户
+    PageInfo<UserInfo> getSearchedList(Integer pageNum,Integer pageSize,String keyword);
 }
