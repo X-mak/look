@@ -75,31 +75,31 @@ public interface CourseMapper extends Mapper<Course> {
     })
     List<Course> queryCoursesInfo();
 
-    @Select("SELECT c.*,p.publish_date,u.user_name FROM course c LEFT JOIN publish p ON c.id=p.course_id LEFT JOIN userinfo u ON u.user_account=p.user_account LEFT JOIN courseclass cs ON c.id=cs.id WHERE cs.age LIKE #{age} ORDER BY RAND() LIMIT #{limit}")
+    @Select("SELECT c.*,p.publish_date,u.user_name FROM course c LEFT JOIN publish p ON c.id=p.course_id LEFT JOIN userinfo u ON u.user_account=p.user_account LEFT JOIN courseclass cs ON c.id=cs.id WHERE cs.age LIKE #{age} AND c.status=1 ORDER BY RAND() LIMIT #{limit}")
     @ResultMap(value = "courseInfo")
     List<Course> queryRandCourses(String age,Integer limit);
 
-    @Select("SELECT c.*,u.user_name,p.publish_date FROM course c LEFT JOIN publish p ON p.course_id=c.id LEFT JOIN userinfo u ON u.user_account=p.user_account LEFT JOIN subscribe s ON s.main_account=u.user_account WHERE p.publish_date >= s.date AND s.follow_account=#{userAccount} ORDER BY p.publish_date DESC")
+    @Select("SELECT c.*,u.user_name,p.publish_date FROM course c LEFT JOIN publish p ON p.course_id=c.id LEFT JOIN userinfo u ON u.user_account=p.user_account LEFT JOIN subscribe s ON s.main_account=u.user_account WHERE p.publish_date >= s.date AND s.follow_account=#{userAccount} AND c.status=1 ORDER BY p.publish_date DESC")
     @ResultMap(value = "courseInfo")
     List<Course> queryUpdatedCourses(String userAccount);
 
     @Select("SELECT c.*,p.publish_date,u.user_name FROM course c LEFT JOIN publish p ON c.id=p.course_id " +
-            "LEFT JOIN userinfo u ON u.user_account=p.user_account ORDER BY p.publish_date DESC LIMIT 4")
+            "LEFT JOIN userinfo u ON u.user_account=p.user_account WHERE c.status=1 ORDER BY p.publish_date  DESC LIMIT 4")
     @ResultMap(value = "courseInfo")
     List<Course> queryRecentCourses();
 
     @Select("SELECT c.*,p.publish_date,u.user_name FROM course c LEFT JOIN publish p ON c.id=p.course_id " +
-            "LEFT JOIN userinfo u ON u.user_account=p.user_account ORDER BY c.clicks DESC LIMIT 4")
+            "LEFT JOIN userinfo u ON u.user_account=p.user_account WHERE c.status=1 ORDER BY c.clicks  DESC LIMIT 4")
     @ResultMap(value = "courseInfo")
     List<Course> queryHotCourses();
 
     @Select("SELECT c.*,p.publish_date,u.user_name FROM course c LEFT JOIN publish p ON c.id=p.course_id " +
-            "LEFT JOIN userinfo u ON u.user_account=p.user_account WHERE c.cost=0 ORDER BY RAND() LIMIT 4")
+            "LEFT JOIN userinfo u ON u.user_account=p.user_account WHERE c.cost=0 AND c.status=1 ORDER BY RAND() LIMIT 4")
     @ResultMap(value = "courseInfo")
     List<Course> queryFreeCourses();
 
     @Select("SELECT c.id,c.course_name,c.course_img,p.publish_date FROM course c LEFT JOIN publish p ON " +
-            "p.course_id = c.id WHERE p.user_account=#{userAccount} ORDER BY p.publish_date DESC LIMIT 3")
+            "p.course_id = c.id WHERE p.user_account=#{userAccount} AND c.status=1 ORDER BY p.publish_date DESC LIMIT 3")
     @Results(id = "smallCourse",value = {
             @Result(id = true,column = "id",property = "id"),
             @Result(column = "course_name",property = "courseName"),
