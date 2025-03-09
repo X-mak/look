@@ -23,7 +23,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class TokenUtils {
+public class  TokenUtils {
 
     @Autowired
     private AccountRoleMapper accountRoleMapper;

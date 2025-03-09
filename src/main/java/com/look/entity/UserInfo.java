@@ -25,4 +25,9 @@ public class UserInfo {
 
     @Transient
     private List<Course> recentCourse;
+
+    public UserInfo find(String userName){
+        return null;
+    }
+
 }

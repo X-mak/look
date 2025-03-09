@@ -61,8 +61,6 @@ public class CourseController {
     public Result<?> getSelectedCourses(@RequestParam String keyword, @RequestParam String order,
                                         @RequestParam String age, @RequestParam String subject,
                                         @PathVariable int pageNum, @RequestParam Integer pageSize){
-        //设置每页数据量
-
         PageHelper.startPage(pageNum,pageSize,true);
         if(age.equals(""))age="%";
         if(subject.equals(""))subject="%";

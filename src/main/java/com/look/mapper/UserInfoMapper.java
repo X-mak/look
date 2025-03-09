@@ -22,7 +22,8 @@ public interface UserInfoMapper extends Mapper<UserInfo> {
     @ResultMap(value = "singleUser")
     UserInfo queryOneUserInfo(String userAccount);
 
-    @Select("SELECT u.user_account,u.user_name,u.user_img,u.fans FROM userinfo u LEFT JOIN accountrole ar ON ar.user_account=u.user_account " +
+    @Select("SELECT u.user_account,u.user_name,u.user_img,u.fans FROM userinfo u LEFT JOIN accountrole ar ON " +
+            "ar.user_account=u.user_account " +
             "WHERE ar.role_id = 3 AND u.user_name LIKE #{keyword} ORDER BY u.fans DESC")
     @Results(id = "userPageInfo",value = {
             @Result(id = true,column = "user_account",property = "userAccount"),
@@ -33,7 +34,8 @@ public interface UserInfoMapper extends Mapper<UserInfo> {
     })
     List<UserInfo> querySelectedUserDown(String keyword);
 
-    @Select("SELECT u.user_account,u.user_name,u.user_img,u.fans FROM userinfo u LEFT JOIN accountrole ar ON ar.user_account=u.user_account " +
+    @Select("SELECT u.user_account,u.user_name,u.user_img,u.fans FROM userinfo u LEFT JOIN accountrole ar " +
+            "ON ar.user_account=u.user_account " +
             "WHERE ar.role_id = 3 AND u.user_name LIKE #{keyword} ORDER BY u.fans DEC")
     @ResultMap(value = "userPageInfo")
     List<UserInfo> querySelectedUserUp(String keyword);
